@@ -1,1 +1,21 @@
 
+backend:
+  name: github
+  repo: username/nama-repo # Ganti dengan repo Anda
+  branch: main # Atau master
+  base_url: https://your-oauth-bridge.com # Ini jembatan autentikasinya
+  auth_endpoint: auth
+
+media_folder: "public/images/blog"
+public_folder: "/images/blog"
+
+collections:
+  - name: "posts"
+    label: "Artikel"
+    folder: "src/content/blog" # Sesuaikan folder Markdown Anda
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Body", name: "body", widget: "markdown"}
