@@ -1,0 +1,86 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools — RWAHQ</title>
+  <meta name="description" content="Free RWA tools: yield calculator, protocol comparison, and risk checker. Built because we couldn't find anything good enough.">
+  <link rel="canonical" href="https://rwahq.dev/tools">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script is:inline src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-slate-900 font-sans antialiased">
+
+  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
+      <a href="/" class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center"><i data-lucide="activity" class="w-4 h-4 text-white"></i></div>
+        <span class="font-bold text-gray-900 tracking-tight">RW<span class="text-blue-600">AHQ</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-6 text-sm text-gray-500">
+        <a href="/blog" class="hover:text-blue-600 transition-colors">Blog</a>
+        <a href="/market" class="hover:text-blue-600 transition-colors">Market</a>
+        <a href="/learn" class="hover:text-blue-600 transition-colors">Learn</a>
+        <a href="/tools" class="text-blue-600 font-medium">Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="bg-gradient-to-br from-emerald-600 to-teal-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <span class="inline-flex items-center gap-2 bg-white/10 text-emerald-200 text-xs font-bold uppercase tracking-[0.15em] px-3 py-1 rounded-full border border-white/10 mb-4">
+        <i data-lucide="wrench" class="w-3.5 h-3.5"></i> Free Tools
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">RWA Tools</h1>
+      <p class="text-emerald-200 text-lg max-w-xl">We built these because we kept doing the same calculations by hand. Figured others might need them too.</p>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white rounded-xl border border-gray-100 p-6 opacity-60">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center"><i data-lucide="calculator" class="w-6 h-6 text-blue-600"></i></div>
+          <span class="text-[10px] bg-gray-100 text-gray-500 font-bold px-2 py-0.5 rounded-full">BUILDING</span>
+        </div>
+        <h3 class="text-base font-bold text-gray-900 mb-2">RWA Yield Calculator</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Compare effective yields across BUIDL, OUSG, XAUT, and DeFi lending. Factor in borrowing costs to see what you actually make.</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 p-6 opacity-60">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center"><i data-lucide="git-compare" class="w-6 h-6 text-purple-600"></i></div>
+          <span class="text-[10px] bg-gray-100 text-gray-500 font-bold px-2 py-0.5 rounded-full">BUILDING</span>
+        </div>
+        <h3 class="text-base font-bold text-gray-900 mb-2">Protocol Comparison</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Side-by-side comparison of Aave vs Compound vs Morpho. TVL, yields, risk scores, supported collateral — all in one view.</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 p-6 opacity-60">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center"><i data-lucide="shield-alert" class="w-6 h-6 text-red-600"></i></div>
+          <span class="text-[10px] bg-gray-100 text-gray-500 font-bold px-2 py-0.5 rounded-full">PLANNED</span>
+        </div>
+        <h3 class="text-base font-bold text-gray-900 mb-2">Protocol Risk Checker</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Audit history, bug bounty payouts, governance attacks survived, and bad debt accumulated. Before you deposit.</p>
+      </div>
+    </div>
+    <p class="text-center text-sm text-gray-400 mt-12">More tools coming as we need them. No timeline — they ship when they're ready.</p>
+  </section>
+
+  <footer class="bg-gray-900 text-gray-400 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center"><i data-lucide="activity" class="w-3.5 h-3.5 text-white"></i></div>
+        <span class="font-bold text-white text-sm">RW<span class="text-blue-400">AHQ</span></span>
+      </div>
+      <p class="text-xs text-gray-500">© 2025 RWAHQ. Not financial advice.</p>
+      <a href="https://twitter.com/rwahq_io" class="hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+    </div>
+  </footer>
+  <script is:inline>lucide.createIcons();</script>
+</body>
+</html>

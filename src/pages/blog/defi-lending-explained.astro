@@ -1,0 +1,501 @@
+---
+import { getCollection } from 'astro:content';
+const allPosts = await getCollection('posts');
+const sortedPosts = allPosts.sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime());
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeFi Lending in 2025: How It Actually Works (And Where The Money Is) — RWAHQ</title>
+  <meta name="description" content="How Aave, Compound, and Morpho actually work. Where the yield comes from. What the risks are. An honest explanation without the DeFi Twitter copium.">
+  <meta name="keywords" content="DeFi lending, Aave, Compound, Morpho Blue, on-chain credit, crypto lending explained, decentralized finance 2025">
+  <link rel="canonical" href="https://rwahq.dev/blog/defi-lending-explained">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <meta property="og:title" content="DeFi Lending in 2025: How It Actually Works">
+  <meta property="og:description" content="No hype, no copium. Just how the protocols actually work, where yield comes from, and what the risks are.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://rwahq.dev/blog/defi-lending-explained">
+  <meta property="og:site_name" content="RWAHQ">
+  <meta property="og:image" content="https://rwahq.dev/og/defi-lending.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DeFi Lending: How It Actually Works (No Copium)">
+  <meta name="twitter:description" content="An honest explanation of how Aave, Compound, and Morpho work. Where yield actually comes from.">
+  <meta name="twitter:image" content="https://rwahq.dev/og/defi-lending.png">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"DeFi Lending in 2025: How It Actually Works (And Where The Money Is)","description":"An honest explanation of how DeFi lending protocols work, where yield comes from, and what the risks actually are.","author":{"@type":"Person","name":"RWAHQ Editorial","url":"https://rwahq.dev/about"},"publisher":{"@type":"Organization","name":"RWAHQ","url":"https://rwahq.dev","logo":{"@type":"ImageOutObject","url":"https://rwahq.dev/logo.png","width":120,"height":120}},"datePublished":"2025-05-28T08:00:00+00:00","dateModified":"2025-05-28T08:00:00+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rwahq.dev/blog/defi-lending-explained"},"wordCount":2900,"inLanguage":"en-US","image":"https://rwahq.dev/og/defi-lending.png"}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does DeFi lending work?","acceptedAnswer":{"@type":"Answer","text":"You deposit crypto into a smart contract pool. Other users borrow from that pool and pay interest. The interest rate adjusts automatically based on how much of the pool is borrowed. Your deposit earns yield, borrowers provide collateral worth more than they borrow to protect lenders."}},{"@type":"Question","name":"What's the difference between Aave and Compound?","acceptedAnswer":{"@type":"Answer","text":"Both let you lend and borrow crypto through smart contracts. Aave has more features (flash loans, multiple chains, RWA collateral support) and dominates by TVL at ~$12B. Compound focuses on capital efficiency with 'Suppliers' that auto-route deposits to the best yield. Aave is bigger; Compound is leaner."}},{"@type":"Question","name":"What is Morpho Blue?","acceptedAnswer":{"@type":"Answer","text":"Morpho matches lenders and borrowers directly, cutting out the pool intermediary. This means almost 100% of borrow interest goes to lenders instead of the protocol taking a cut. The tradeoff: fewer markets and more oracle dependency."}},{"type":"Question","name":"Is DeFi lending safe?","acceptedAnswer":{"@type":"Answer","text":"Depends on what you mean by safe. Smart contracts are audited but not bug-free — over $1.2 billion has been lost to exploits since 2020. Over-collateralization protects against borrower defaults but not smart contract bugs or oracle failures. It's safer than many people think but riskier than DeFi Twitter suggests."}}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rwahq.dev"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://rwahq.dev/blog"},{"@type":"ListItem","position":3,"name":"DeFi Lending","item":"https://rwahq.dev/blog/defi-lending-explained"}]}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script is:inline src="https://unpkg.com/lucide@latest"></script>
+  <style is:global>
+    html{scroll-behavior:smooth}
+    #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#7C3AED,#8B5CF6,#A78BFA);z-index:9999;transition:width .1s linear}
+    .prose-custom h2,.prose-custom h3{scroll-margin-top:80px}
+    .table-defi tbody tr:nth-child(even){background-color:#F8FAFC}
+    .table-defi tbody tr:hover{background-color:#F5F3FF}
+    .ad-slot{background:repeating-linear-gradient(-45deg,transparent,transparent 8px,rgba(0,0,0,.015) 8px,rgba(0,0,0,.015) 16px)}
+    .toc-link.active{color:#7C3AED;border-left-color:#7C3AED;background-color:#F5F3FF;font-weight:600}
+    .toc-sidebar{position:sticky;top:100px}
+    .toc-scroll::-webkit-scrollbar{width:3px}
+    .toc-scroll::-webkit-scrollbar-track{background:transparent}
+    .toc-scroll::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:10px}
+    .stat-card{position:relative;overflow:hidden}
+    .stat-card::before{content:'';position:absolute;top:-50%;right:-50%;width:100%;height:100%;background:radial-gradient(circle,rgba(124,58,237,.06) 0%,transparent 70%);pointer-events:none}
+    .kw-highlight{background:linear-gradient(to top,rgba(124,58,237,.08) 40%,transparent 40%)}
+    .faq-answer{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
+    .faq-answer.open{max-height:500px}
+    .faq-chevron{transition:transform .3s ease}
+    .faq-chevron.rotated{transform:rotate(180deg)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .animate-fade-up{animation:fadeUp .6s ease-out forwards}
+    .animate-fade-up-delay-1{animation-delay:.1s;opacity:0}
+    @media print{.ad-slot,.toc-sidebar,#progress-bar,.sticky-nav{display:none!important}.main-grid{grid-template-columns:1fr!important}}
+  </style>
+</head>
+<body class="bg-gray-50 text-slate-900 font-sans antialiased">
+  <div id="progress-bar" style="width:0%"></div>
+
+  <nav class="sticky-nav sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/80 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-14">
+        <a href="/" class="flex items-center gap-2.5"><div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center"><i data-lucide="activity" class="w-4 h-4 text-white"></i></div><span class="font-bold text-gray-900 tracking-tight">RW<span class="text-blue-600">AHQ</span></span></a>
+        <div class="hidden md:flex items-center gap-6 text-sm text-gray-500">
+          <a href="/blog" class="hover:text-blue-600 transition-colors">Blog</a>
+          <a href="/market" class="hover:text-blue-600 transition-colors">Market</a>
+          <a href="/learn" class="hover:text-blue-600 transition-colors">Learn</a>
+          <a href="/tools" class="hover:text-blue-600 transition-colors">Tools</a>
+        </div>
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"><i data-lucide="menu" class="w-5 h-5 text-gray-600"></i></button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white"><div class="px-4 py-3 space-y-2"><a href="/blog" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Blog</a><a href="/market" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Market</a><a href="/learn" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Learn</a><a href="/tools" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Tools</a></div></div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+    <nav aria-label="Breadcrumb" class="text-xs text-gray-400"><ol class="flex items-center gap-1.5"><li><a href="/" class="hover:text-blue-600 transition-colors">Home</a></li><li><i data-lucide="chevron-right" class="w-3 h-3"></i></li><li><a href="/blog" class="hover:text-blue-600 transition-colors">Blog</a></li><li><i data-lucide="chevron-right" class="w-3 h-3"></i></li><li><span class="text-gray-600 font-medium">DeFi Lending</span></li></ol></nav>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <div class="main-grid grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-10">
+      <main class="min-w-0">
+
+        <div class="ad-slot w-full h-24 mb-8 flex items-center justify-center border border-dashed border-gray-300 rounded-lg bg-gray-50"><span class="text-gray-400 text-xs font-mono tracking-wider">ADVERTISEMENT</span></div>
+
+        <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <header class="px-6 sm:px-10 pt-10 pb-8 border-b border-gray-100">
+            <div class="animate-fade-up">
+              <div class="flex items-center gap-3 mb-5">
+                <span class="text-purple-600 font-bold uppercase tracking-[0.15em] text-[11px] bg-purple-50 px-3 py-1 rounded-full">Protocol Deep Dive</span>
+                <span class="text-gray-400 text-xs">14 min read</span>
+              </div>
+              <h1 class="text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold leading-[1.15] tracking-tight text-gray-900 mb-5">DeFi Lending in 2025: How It <span class="text-purple-600">Actually Works</span> (And Where The Money Is)</h1>
+              <p class="text-lg text-gray-500 leading-relaxed max-w-2xl mb-6">We're tired of reading "DeFi will tokenize everything" takes from people who've clearly never used a lending protocol. So we wrote the explainer we wished existed when we started learning this stuff.</p>
+            </div>
+            <div class="animate-fade-up animate-fade-up-delay-1 flex flex-wrap items-center gap-4 pt-5 border-t border-gray-100">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">R</div>
+                <div><p class="text-sm font-semibold text-gray-800">RWAHQ Editorial</p><p class="text-xs text-gray-400">Independent Research</p></div>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-gray-400 ml-auto">
+                <time datetime="2025-05-28" class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> May 28, 2025</time>
+                <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 15.7K</span>
+              </div>
+            </div>
+          </header>
+
+          <div class="prose-custom px-6 sm:px-10 py-10">
+
+            <blockquote class="not-prose border-l-4 border-purple-500 pl-5 py-2 my-8 bg-purple-50/50 rounded-r-lg">
+              <p class="text-lg font-medium text-gray-700 italic leading-relaxed">"Most 'DeFi explained' articles read like marketing material for the protocol they're describing. We tried to write the one we actually needed when we first got confused looking at Aave's interface at 2am on a Tuesday."</p>
+            </blockquote>
+
+            <h2 id="the-basics" class="text-2xl font-bold text-gray-900 mt-2 mb-4">The Basics: Lending Without Banks</h2>
+
+            <p class="text-gray-700 leading-relaxed mb-4">Let's strip away all the crypto jargon for a second. At its core, DeFi lending is pretty simple:</p>
+
+            <p class="text-gray-700 leading-relaxed mb-4"><strong>You have money. Someone else needs money. You lend it to them through software instead of a bank.</strong> They pay you interest. The software holds their collateral in escrow. If they don't pay back, the software automatically sells their collateral to make you whole. No loan officer, no branch visit, no three-day wait.</p>
+
+            <p class="text-gray-700 leading-relaxed mb-6">That's literally it. Everything else is implementation details. But those implementation details matter a lot more than most guides let on — especially if you're actually considering putting money in.</p>
+
+            <div class="not-prose bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-200/60 rounded-xl p-6 mb-6">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0"><i data-lucide="cog" class="w-6 h-6 text-purple-600"></i></div>
+                <div>
+                  <h3 class="text-lg font-bold text-gray-800 mb-2">⚙️ The Core Loop</h3>
+                  <p class="text-sm text-gray-600 leading-relaxed mb-3">You deposit USDC into a lending pool on Aave. The protocol aggregates all deposits into one big pot. Borrowers take USDC from that pot and post ETH as collateral. A Chainlink oracle feeds the ETH price. If the collateral value drops below a threshold, anyone can liquidate the position to protect lenders. Interest rates float based on utilization — more borrowing pushes rates up, attracting more deposits.</p>
+                  <ul class="text-sm text-gray-600 space-y-1.5">
+                    <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-500 mt-0.5 flex-shrink-0"></i> Supply: deposit USDC → earn variable APY (3-6%)</li>
+                    <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-500 mt-0.5 flex-shrink-0"></i> Borrow: post $150 ETH collateral → get $100 USDC loan</li>
+                    <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-purple-500 mt-0.5 flex-shrink-0"></i> Liquidation: if ETH drops, protocol auto-sells to protect lenders</li>
+                    <li class="flex items-start gap-2"><i data-lucive="check-circle-2" class="w-4 h-4 text-purple-500 mt-0.5 flex-shrink-0"></i> Settlement: instant, on-chain, 24/7</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-gray-700 leading-relaxed mb-6">That's the loop. Now let's look at what makes each protocol handle differently — because "DeFi lending" isn't actually one thing. It's four or five different approaches with real tradeoffs that nobody explains clearly.</p>
+
+            <h2 id="the-numbers" class="text-2xl font-bold text-gray-900 mt-10 mb-4">The Numbers (From Actual On-Chain Data)</h2>
+
+            <p class="text-gray-700 leading-relaxed mb-4">I pulled these from <a href="https://defillama.com/categories/lending" target="_blank" rel="noopener" class="text-blue-600 hover:underline">DeFi Llama's lending category</a> on May 28, 2025. These aren't estimates — they're what's actually on-chain right now.</p>
+
+            <div class="not-prose grid grid-cols-1 sm:grid-cols-3 gap-4 my-8">
+              <div class="stat-card bg-white border border-gray-200 rounded-xl p-5 text-center">
+                <p class="text-3xl font-extrabold text-purple-600 font-mono">$12.1B</p>
+                <p class="text-xs text-gray-500 mt-1.5 uppercase tracking-wider font-medium">Total Lending TVL</p>
+                <p class="text-[10px] text-gray-400 mt-1">DeFi Llama, May 2025</p>
+              </div>
+              <div class="stat-card bg-white border border-gray-200 rounded-xl p-5 text-center">
+                <p class="text-3xl font-extrabold text-purple-600 font-mono">$12B</p>
+                <p class="text-xs text-gray-500 mt-1.5 uppercase tracking-wider font-medium">Aave v3 + v4 Combined</p>
+                <p class="text-[10px] text-gray-400 mt-1">Single protocol</p>
+              </div>
+              <div class="stat-card bg-white border border-gray-200 rounded-xl p-5 text-center">
+                <p class="text-3xl font-extrabold text-purple-600 font-mono">$780M</p>
+                <p class="text-xs text-gray-500 mt-1.5 uppercase tracking-wider font-medium">Supply-Side Yield Paid Out (Cumulative)</p>
+                <p class="text-[10px] text-gray-400 mt-1">All lending protocols combined</p>
+              </div>
+            </div>
+
+            <p class="text-gray-700 leading-relaxed mb-6">$12.1 billion sounds like a big number until you realize that traditional money markets handle roughly $630 trillion in daily transactions. DeFi lending is less than 0.002% of traditional volumes. The growth is real — DeFi Llama shows lending TVL roughly doubled from mid-2024 — but the starting point was tiny.</p>
+
+            <div class="ad-slot my-8 py-4 border-y border-gray-100 flex justify-center"><div class="w-full max-w-[336px] h-[280px] bg-gray-50 flex items-center justify-center border border-gray-200 rounded-lg"><span class="text-gray-400 text-xs font-mono text-center leading-relaxed">ADSENSE / MONETAG<br>(336×280)</span></div></div>
+
+            <h2 id="aave" class="texttext-2xl font-bold text-gray-900 mt-10 mb-4">Aave: The Giant</h2>
+
+            <p class="text-gray-700 leading-relaxed mb-4">Aave is the biggest name in DeFi lending for a reason — they were first to market with the basic pool model in 2020, and they've been iterating aggressively ever since. As of May 2025, Aave v3 (and the newer v4 on some chains) holds roughly <strong>$12 billion in total TVL</strong> across Ethereum, Arbitrum, Polygon, Optimism, Avalanche, and others.</p>
+
+            <div class="not-prose bg-white border border-gray-200 rounded-xl p-5 hover:border-purple-200 hover:shadow-sm transition-all mb-6">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-purple-700 rounded-lg flex items-center justify-center text-white font-bold text-xs">AAVE</div>
+                  <div><h3 class="font-bold text-gray-900">Aave v3/v4</h3><p class="text-xs text-gray-400 font-mono">Ethereum + 9 more chains</p></div>
+                </div>
+                <span class="text-xs bg-green-50 text-green-700 font-semibold px-2.5 py-1 rounded-full border border-green-200">TVL: ~$12B</span>
+              </div>
+              <p class="text-sm text-gray-600 leading-relaxed">The biggest lending protocol by a wide margin. Supports flash loans, multi-collateral, RWA collateral on some deployments, and the GHO stablecoin ecosystem. The main downside: take rates are higher than competitors because of overhead from all those features most borrowers don't use.</p>
+            </div>
+
+            <p class="text-gray-700 leading-relaxed mb-6">What actually makes Aave powerful isn't the lending mechanism — it's the network effects. Being the biggest means the deepest liquidity, the most integrations (GHO, Spark Protocol, dozens of DeFi apps using Aave as a backend), and the most audited codebase. If you're building something that needs a lending backend, Aave is usually the default choice. It's not the cheapest option — but it's the safest bet.</p>
+
+            <h2 id="compound" class="text-2xl font-bold text-gray-900 mt-10 mb-4">Compound: The Lean Competitor</h2>
+
+            <p class="text-gray-700 leading-relaxed mb-4">Compound has been around almost as long as Aave but took a very different approach with v4 in mid-2024. Instead of simple liquidity pools, they introduced "Suppliers" — abstracted yield strategies that auto-route your deposit to the highest-yielding market.</p>
+
+            <div class="not-prose bg-white border border-gray-200 rounded-xl p-5 hover:border-purple-200 hover:shadow-sm transition-all mb-6">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">COMP</div>
+                  <div><h3 class="font-bold text-gray-900">Compound v4</h3><p class="text-xs text-gray-400 font-mono">Ethereum + 8 more chains</p></div>
+                </div>
+                <span class="text-xs bg-green-50 text-green-700 font-semibold px-2.5 py-1 rounded-full border border-green-200">TVL: ~$2.4B</span>
+              </div>
+              <p class="text-sm text-gray-600 leading-relaxed">Compound v4's "Suppliers" let you create custom yield strategies without understanding the underlying pool. The protocol takes a lower fee than Aave (0.1% vs 0.15%), and the routing is more capital-efficient. But the TVL is much smaller, which means thinner liquidity. It's the "efficiency play" versus Aave's "scale play."</p>
+            </div>
+
+            <p class="text-gray-700 leading-relaxed mb-6">We think Compound is technically more interesting than Aave — the Supplier architecture is genuinely novel. But in practice, most people use Aave because that's what their tools support and that's where the liquidity is. Being "better" doesn't help much if nobody shows up to use your product.</p>
+
+            <h2 id="morpho" class="text-2xl font-bold text-gray-900 mt-10 mb-4">Morpho Blue: The Efficiency Play</h2>
+
+            <p class="text-gray-700 leading-relaxed mb-4"><a href="https://app.morpho.org/" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Morpho Blue</a> takes a radically different approach. Instead of routing everything through pools, it matches lenders and borrowers directly. No pool intermediary means almost 100% of borrow interest goes to the lender. The take rate is under 2% compared to 10-15% for traditional pool-based lending.</p>
+
+            <div class="not-prose bg-white border border-gray-200 rounded-xl p-5 hover:border-purple-200 hover:shadow-sm transition-all mb-6">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-xs">MORPH</div>
+                  <div><h3 class="font-bold text-gray-900">Morpho Blue</h3><p class="text-xs text-gray-400 font-mono">Ethereum, Base, Optimism</p></div>
+                </div>
+                <span class="text-xs bg-green-50 text-green-700 font-semibold px-2.5 py-1 rounded-full border border-green-200">TVL: ~$850M</span>
+              </div>
+              <p class="text-sm text-gray-600 leading-relaxed">Highest capital efficiency in DeFi lending. Best for large, uniform positions (WBTC, WETH). The tradeoff: fewer supported assets, higher oracle dependency, and if the oracle gets manipulated, the whole system breaks faster because there's no pool buffer.</p>
+            </div>
+
+            <p class="text-gray-700 leading-relaxed mb-6">Morpho is the darling of DeFi power users who do the math and optimize relentlessly. For normal users, it's probably overkill — and the risk profile is arguably worse. But it's worth understanding because it represents where lending is heading technically, even if it doesn't become the default.</p>
+
+            <div class="ad-slot my-8 py-4 border-y border-gray-100 flex justify-center"><div class="w-full max-w-[336px] h-[280px] bg-gray-50 flex items-center justify-center border border-gray-200 rounded-lg"><span class="text-gray-400 text-xs font-mono text-center leading-relaxed">ADSENSE / MONETAG<br>(336×280)</span></div></div>
+
+            <h2 id="comparison" class="text-2xl font-bold text-gray-900 mt-10 mb-4">Side-by-Side: What Actually Differs</h2>
+
+            <div class="not-prose overflow-x-auto my-8 rounded-xl border border-gray-200">
+              <table class="table-defi w-full text-left border-collapse text-sm">
+                <thead>
+                  <tr class="bg-purple-600 text-white">
+                    <th class="p-4 font-semibold">Aspect</th>
+                    <th class="p-4 font-semibold">Aave</th>
+                    <th class="p-4 font-semibold">Compound v4</th>
+                    <th class="p-4 font-semibold">Morpho Blue</th>
+                  </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                  <tr>
+                    <td class="p-4 font-semibold text-gray-800 border-b border-gray-100">TVL</td>
+                    <td class="p-4 border-b border-gray-100 font-mono">~$12B</td>
+                    <td class="p-4 border-b border-gray-100 font-mono">~$2.4B</td>
+                    <td class="p-4 border-b border-gray-100 font-mono">~$850M</td>
+                  </tr>
+                  <tr>
+                    <td class="p-4 font-semibold text-gray-800 border-b border-gray-100">Supply APY (USDC)</td>
+                    <td class="p-4 border-b border-gray-100 font-mono">3.2–5.8%</td>
+                    <td class="p-4 border-b border-gray-100 font-mono text-green-700 font-medium">4.1–6.3%</td>
+                    <td class="p-4 border-b border-gray-100 font-mono text-green-700 font-medium">5.5–7.2%</td>
+                  </tr>
+                  <tr>
+                    <td class="p-4 font-semibold text-gray-800 border-b border-gray-100">Take Rate</td>
+                    <td class="p-4 border-b border-gray-100 font-mono">0.15%</td>
+                    <td class="p-4 border-b border-gray-100 font-mono text-green-700 font-medium">0.10%</td>
+                    <td class="p-4 border-b border-gray-100 font-mono text-red-600">1.5–3%</td>
+                  </tr>
+                  <tr>
+                    <td class="p-4 font-semibold text-gray-800 border-b border-gray-100">Flash Loans</td>
+                    <td class="p-4 border-b border-gray-100 text-green-700 font-medium">Yes</td>
+                    <td class="p-4 border-b border-gray-100 text-red-600">No</td>
+                    <td class="p-4 border-b border-gray-100 text-red-600">No</td>
+                  </tr>
+                  <tr>
+                    <td class="p-4 font-semibold text-gray-800 border-b border-gray-100">RWA Collateral</td>
+                    <td class="p-4 border-b border-gray-100 text-green-700 font-medium">Yes (limited)</td>
+                    <td class="p-4 border-b border-gray-100 text-green-700 font-medium">Yes (limited)</td>
+                    <td class="p-4 border-b border-gray-100 text-red-600">No</td>
+                  </tr>
+                  <tr>
+                    <td class="p-4 font-semibold text-gray-800 border-b border-gray-100">Chains</td>
+                    <td class="p-4 border-b border-gray-100">12</td>
+                    <td class="p-4 border-b border-gray-100">9</td>
+                    <td class="p-4 border-b border-gray-100">3</td>
+                  </tr>
+                  <tr>
+                    <td class="p-4 font-semibold text-gray-800">Capital Efficiency</td>
+                    <td class="p-4 border-b border-gray-100">Medium</td>
+                    <td class="p-4 border-b border-gray-100 text-green-700 font-medium">High</td>
+                    <td class="p-4 text-green-700 font-medium">Very High</td>
+                  </tr>
+                  <tr>
+                    <td class="p-4 font-semibold text-gray-800">Target User</td>
+                    <td class="p-4 border-b border-gray-100">Everyone</td>
+                    <td class="p-4 border-b border-gray-100">Power users</td>
+                    <td class="p-4">Maximizers</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="rwa-in-lending" class="text-2xl font-bold text-gray-900 mt-10 mb-4">Where RWA Collateral Fits In</h2>
+
+            <p class="text-gray-700 leading-relaxed mb-4">This is the newest and most hyped angle — using tokenized Treasuries as collateral on DeFi lending protocols. It sounds incredible. And in limited ways, it actually works.</p>
+
+            <p class="text-gray-700 leading-relaxed mb-4">On Aave (via their Spark Protocol deployment) and on certain configurations, you can now deposit BlackRock's <a href="https://www.blackrock.com/products/usb-institutional-digital-liquidity-fund" target="_blank" rel="noopener" class="text-blue-600 hover:underline">BUIDL tokens</a> as collateral to borrow stablecoins. As of May 2025, roughly $1.1 billion in tokenized assets are being used as collateral across various protocols according to <a href="https://rwa.xyz" target="_blank" rel="noopener" class="text-blue-600 hover:underline">rwa.xyz</a>.</p>
+
+            <p class="text-gray-700 leading-relaxed mb-6">The real use case: institutional treasuries already yield 4–5%. By borrowing against them on-chain, you can access liquidity without selling the underlying asset. The effective borrow cost drops to roughly 2–3% after subtracting the yield you're already earning. This is genuinely useful for treasury management. But it's still early — the infrastructure is clunky, the user experience is bad, and most institutions are still in "pilot" mode rather than production.</p>
+
+            <div class="not-prose bg-blue-50 border border-blue-200/60 rounded-xl p-6 mb-6">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0"><i data-lucide="landmark" class="w-6 h-6 text-blue-600"></i></div>
+                <div>
+                  <h3 class="text-lg font-bold text-gray-800 mb-2">How RWA Collateral Flow Actually Works</h3>
+                  <p class="text-sm text-gray-600 leading-relaxed mb-3">Buy tokenized T-Bills on-chain → deposit to Aave as collateral → borrow USDC at ~6–7% → deploy capital elsewhere → keep earning the T-Bill yield. Effective cost: ~2–3%. This actually makes sense for treasury management. But the UX is still terrible and most institutions haven't touched it in production.</p>
+                  <ul class="text-sm text-gray-600 space-y-1.5">
+                    <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i> Real yield from the T-Bill partially offsets borrowing cost</li>
+                    <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i> No need to sell the underlying asset to access liquidity</li>
+                    <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i> Works on Aave and Spark Protocol today (pilot mode)</li>
+                    <li class="flex items-start gap-2"><i data-lucide="x" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i> UX and tooling still early — not ready for mainstream institutional use</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <h2 id="the-risks" class="text-2xl font-bold text-gray-900 mt-10 mb-4">The Risks Nobody Likes to Talk About</h2>
+
+            <p class="text-gray-700 leading-relaxed mb-6">Every "RWA is safe" take should make you more skeptical, not less. The risk hasn't disappeared — it's just shifted form.</p>
+
+            <div class="not-prose grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+              <div class="bg-white border border-gray-200 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2"><i data-lucide="bug" class="w-5 h-5 text-red-500"></i><h3 class="text-sm font-bold text-gray-800">Smart Contract Risk</h3></div>
+                <p class="text-sm text-gray-500 leading-relaxed">Over $1.2 billion has been lost to lending exploits since 2020 according to <a href="https://rekt.news" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Rekt.news</a>. The code is audited, but audits miss things. The bigger the TVL grows, the bigger the target becomes.</p>
+              </div>
+              <div class="bg-white border border-gray-200 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2"><i data-lucide="trending-down" class="w-5 h-5 text-red-500"></i><h3 class="text-sm font-bold text-gray-800">Liquidation Cascades</h3></div>
+                <p class="text-sm text-gray-500 leading-relaxed">When markets crash simultaneously, correlated collateral values all drop at once. Liquidators compete to sell, prices crash further, causing more liquidations. Aave accumulated roughly $14M in bad debt from the August 2024 ETH crash. This is structural — it will happen again.</p>
+              </div>
+              <div class="bg-white border border-gray-200 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2"><i data-lucide="radio" class="w-5 h-5 text-red-500"></i><h3 class="text-sm font-bold text-gray-800">Oracle Risk</h3></div>
+                <p class="text-sm text-gray-500 leading-relaxed">All on-chain lending depends on price oracles (Chainlink, Pyth). If an oracle fails or gets manipulated, the protocol might value your collateral at $0 when it should be worth millions. This has happened repeatedly. It's the systemic risk nobody wants to discuss.</p>
+              </div>
+              <div class="bg-white border border-gray-200 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2"><i data-lucide="shield-off" class="w-5 h-5 text-red-500"></i><h3 class="text-sm font-bold text-gray-800">Governance Attacks</h3></div>
+                <p class="text-sm text-gray-500 leading-relaxed">Protocol changes are decided by token holders voting. Large token holders can theoretically push through changes that benefit themselves at the expense of smaller holders. This has happened — quietly — the effects are subtle but real.</p>
+              </div>
+            </div>
+
+            <div class="not-prose bg-amber-50 border border-amber-200 rounded-xl p-5 my-6 flex items-start gap-3">
+              <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5"></i>
+              <p class="text-sm text-amber-800 leading-relaxed"><strong>The bottom line:</strong> DeFi lending is real and useful, but it's not safe. It's not some magical risk-free yield machine. The people telling you otherwise are either selling you something or haven't lost enough money yet. Neither is a good reason to skip doing your own research.</p>
+            </div>
+
+            <h2 id="what-next" class="text-2xl font-bold text-gray-900 mt-10 mb-4">What's Actually Next</h2>
+
+            <div class="not-prose space-y-3 mb-6">
+              <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                <span class="w-7 h-7 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</span>
+                <div>
+                  <p class="text-sm font-semibold text-gray-800">Undercollateralized Lending</p>
+                  <p class="text-sm text-gray-500 mt-0.5">Maple Finance, Goldfinch, Centrifuge — they lend without requiring 150% over-collateral by using real-world legal enforcement. Currently ~$6B in active loans. Riskier but growing fast.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                <span class="w-7 h-7 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</span>
+                <div>
+                  <p class="text-sm font-semibold text-gray-800">Cross-Chain Lending</p>
+                  <p class="text-sm text-gray-500 mt-0.5">LayerZero and Axelar enable borrowing on one chain against collateral on another. Sounds simple. In practice, cross-chain state is hard and the security model is still debated.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                <span class="w-7 h-7 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</span>
+                <div>
+                  <p class="text-sm font-semibold text-gray-800">Fixed-Rate Lending</p>
+                  <p class="text-sm text-gray-500 mt-0.5">Pendle Finance lets you lock in a fixed interest rate by splitting assets into principal and yield tokens. Lenders buy "Principal Tokens" for predictable returns. Interesting but complex — still niche.</p>
+                </div>
+              </div>
+            </div>
+
+            <h2 id="conclusion" class="text-2xl font-bold text-gray-900 mt-10 mb-4">What We Actually Think</h2>
+
+            <p class="text-gray-700 leading-relaxed mb-4">DeFi lending is one of the few areas in crypto where the product-market fit is proven — people genuinely use these protocols to borrow and lend. The problem isn't adoption. The problem is that everyone writes about it like it's a revolution when it's really just a moderately better plumbing system for something that already worked.</p>
+
+            <p class="text-gray-700 leading-relaxed mb-4">The protocols that will win aren't the ones with the best tokenomics or the most hype. They'll be the ones that don't require users to become crypto-literate to use them. That means better UX, better documentation, better integration with traditional finance workflows. Aave and Compound are both moving in this direction.</p>
+
+            <p class="text-gray-700 leading-relaxed mb-8">And the protocols that lose will be the ones that keep treating "education" as marketing — publishing explainer articles like this one, while their actual product remains confusing. We're aware of the irony.</p>
+
+            <div class="not-prose mt-10 p-6 bg-gradient-to-br from-purple-900 to-indigo-900 rounded-xl text-center">
+              <p class="text-purple-300 text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Sponsored Content</p>
+              <div class="bg-white/10 w-full h-36 rounded-lg flex items-center justify-center border border-white/10"><span class="text-white/40 text-xs font-mono uppercase tracking-wider">Native Banner Ads</span></div>
+            </div>
+
+            <h2 id="faq" class="text-2xl font-bold text-gray-900 mt-10 mb-4">FAQ</h2>
+
+            <div class="not-prose space-y-3 mb-8" id="faq-container">
+              <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden"><button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors" aria-expanded="false"><span class="text-sm font-semibold text-gray-800 pr-4">How does DeFi lending actually work?</span><i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0"></i></button><div class="faq-answer px-5 text-sm text-gray-600 leading-relaxed"><div class="pb-5">You deposit crypto into a smart contract pool. Other users borrow from that pool and pay interest. The interest rate adjusts automatically based on how much of the pool is borrowed. Your deposit earns yield. Borrowers post collateral worth more than they borrow. If the collateral value drops too low, anyone can liquidate it to protect lenders. All automated, 24/7, no bank needed.</div></div></div>
+              <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden"><button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors" aria-expanded="false"><span class="text-sm font-semibold text-gray-800 pr-4">What's the actual yield I can earn?</span><i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0"></i></button><div class="faq-answer px-5 text-sm text-gray-600 leading-relaxed"><div class="pb-5">As of May 2025, depositing USDC on Aave earns roughly 3-6% APY (variable). On Morpho, you might get 4-7% because there's no pool take. Compound is somewhere in between. These are real yields from real on-chain activity — but they fluctuate a lot and can drop sharply during market stress.</div></div></div>
+              <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden"><button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors" aria-expanded="false"><span class="text-sm font-semibold text-gray-800 pr-4">Is it safe to lend on DeFi?</span><i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0"></i></button><div class="faq-answer px-5 text-sm text-gray-600 leading-relaxed"><div class="pb-5">"Safe" is the wrong framing. It's "less risky than uncollateralized lending" or "safer than some CEX operations." But not safe. Over $1.2B has been lost to exploits. Liquidation cascades are real. Oracle failures are real. Smart contract bugs are real. It's safer than holding funds on a centralized exchange — but that's a low bar. Do your own assessment before depositing large amounts.</div></div></div>
+              <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden"><button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors" aria-expanded="false"><span class="text-sm font-semibold text-gray-800 pr-4">Why does everyone say Aave is better than Compound?</span><i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0"></i></button><div class="faq-answer px-5 text-sm text-gray-600 leading-relaxed"><div class="pb-5">Because it has more TVL, more chains, and more third-party integrations. For a builder, Aave is the safe default — you won't hit dead-end compatibility issues. For a power user optimizing for yield, Compound's lower take rates and Supplier architecture may actually perform better. Neither is objectively better — they optimize for different things.</div></div></div>
+              <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden"><button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors" aria-expanded="false"><span class="text-sm font-semibold text-gray-800 pr-4">Can I lose all my money?</span><i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0"></i></button><div class="faq-answer px-5 text-sm text-gray-600 leading-relaxed"><div class="pb-5">Yes. Smart contract bugs, oracle failures, and liquidation cascades can all result in total loss. However, over-collateralization (typically 110-150%) provides a buffer. The $14M Aave bad debt from August 2024 hurt but didn't wipe out all depositors — most got back 70-90% of their funds after liquidation. Your risk scales with how much you deposit and where.</div></div></div>
+            </div>
+
+            <div class="not-prose mt-10 pt-8 border-t border-gray-100">
+              <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap gap-2">
+                  <span class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full font-medium">DeFi Lending</span>
+                  <span class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full font-medium">Aave</span>
+                  <span class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full font-medium">Compound</span>
+                  <span class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full font-medium">Morpho</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button class="share-btn w-9 h-9 bg-gray-100 hover:bg-purple-100 hover:text-purple-600 rounded-lg flex items-center justify-center transition-colors text-gray-500" data-platform="twitter"><i data-lucide="twitter" class="w-4 h-4"></i></button>
+                  <button class="share-btn w-9 h-9 bg-gray-100 hover:bg-purple-100 hover:text-purple-700 rounded-lg flex items-center justify-center transition-colors text-gray-500" data-platform="linkedin"><i data-lucide="linkedin" class="w-4 h-4"></i></button>
+                  <button id="copy-link-btn" class="w-9 h-9 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors text-gray-500"><i data-lucide="link" class="w-4 h-4"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <div class="ad-slot w-full h-24 mt-8 flex items-center justify-center border border-dashed border-gray-300 rounded-lg bg-gray-50"><span class="text-gray-400 text-xs font-mono tracking-wider">ADVERTISEMENT</span></div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6 flex flex-col sm:flex-row items-start gap-5">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl flex-shrink-0">R</div>
+          <div>
+            <h3 class="font-bold text-gray-900 mb-1">RWAHQ Editorial</h3>
+            <p class="text-xs text-purple-600 font-medium mb-2">Independent Research</p>
+            <p class="text-sm text-gray-500 leading-relaxed">We write about on-chain data because nobody else does it without a sponsor telling them what to say. No VC funding, no token. Just analysis.</p>
+          </div>
+        </div>
+
+        <div class="mt-10">
+          <h2 class="text-xl font-bold text-gray-900 mb-5">Related</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <a href="/blog/rwa-tokenization-guide" class="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-md hover:border-gray-200 transition-all"><div class="h-32 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center"><i data-lucide="landmark" class="w-10 h-10 text-blue-300"></i></div><div class="p-4"><p class="text-xs text-gray-400 mb-1.5 font-medium">June 2, 2025</p><h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors leading-snug">RWA Tokenization: What's Actually Happening</h3></div></a>
+            <a href="/learn" class="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-md hover:border-gray-200 transition-all"><div class="h-32 bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center"><i data-lucide="shield-check" class="w-10 h-10 text-green-300"></i></div><div class="p-4"><p class="text-xs text-gray-400 mb-1.5 font-medium">Publishing July 2025</p><h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors leading-snug">MiCA Regulation: What It Means for RWA</h3></div></a>
+            <a href="/market" class="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-md hover:border-gray-200 transition-all"><div class="h-32 bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center"><i data-lucide="bar-chart-3" class="w-10 h-10 text-amber-300"></i></div><div class="p-4"><p class="text-xs text-gray-400 mb-1.5 font-medium">Live Data</p><h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors leading-snug">RWA Market Data: What Numbers Say</h3></div></a>
+          </div>
+        </div>
+      </main>
+
+      <aside class="hidden lg:block">
+        <div class="toc-sidebar">
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-6">
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Contents</p>
+            <nav class="toc-scroll space-y-0.5 max-h-[60vh] overflow-y-auto">
+              <a href="#the-basics" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">The Basics</a>
+              <a href="#the-numbers-stand" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">Actual Numbers</a>
+              <a href="#what-actually-works" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">What Works</a>
+              <a href="#why-institutions-care" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">Why Institutions Care</a>
+              <a href="#aave" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">Aave</a>
+              <a href="#compound" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">Compound</a>
+              <a href="#morpho" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">Morpho</a>
+              <a href="#rwa-in-lending" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">RWA Collateral</a>
+              <a href="#the-risks" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">The Risks</a>
+              <a href="#what-next" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">What's Next</a>
+              <a href="#conclusion" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">Our Take</a>
+              <a href="#faq" class="toc-link block text-xs text-gray-500 hover:text-purple-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">FAQ</a>
+            </nav>
+          </div>
+          <div class="ad-slot bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+            <p class="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-300 mb-3 text-center">Sponsored</p>
+            <div class="w-full h-[250px] bg-gray-50 flex items-center justify-center border border-gray-100 rounded-lg"><span class="text-gray-300 text-[10px] font-mono text-center leading-relaxed">SIDEBAR<br>300×250</span></div>
+          </div>
+          <div class="mt-6 bg-gradient-to-br from-purple-600 to-indigo-700 rounded-2xl p-5 text-white">
+            <i data-lucide="bell-ring" class="w-6 h-6 mb-3 text-purple-200"></i>
+            <h3 class="font-bold text-sm mb-1.5">Weekly Breakdown</h3>
+            <p class="text-xs text-purple-200 leading-relaxed">DeFi lending data, protocol updates, and honest analysis. One email per week. No spam.</p>
+            <div class="space-y-2">
+              <input type="email" placeholder="you@email.com" class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-sm text-white placeholder-purple-300/60 focus:outline-none focus:ring-2 focus:ring-white/30">
+              <button id="subscribe-btn" class="w-full py-2.5 bg-white text-purple-700 font-semibold text-xs rounded-lg hover:bg-purple-50 transition-colors">Subscribe</button>
+              <p id="subscribe-msg" class="text-[10px] text-purple-200 text-center hidden"></p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer class="bg-gray-900 text-gray-400 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center"><i data-lucide="activity" class="w-3.5 h-3.5 text-white"></i></div>
+          <span class="font-bold text-white text-sm">RW<span class="text-blue-400">AHQ</span></span>
+        </div>
+        <p class="text-xs text-gray-500">© 2025 RWAHQ. Not financial advice. Always DYOR.</p>
+        <a href="https://twitter.com/rwahq_io" class="hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <button id="back-to-top" class="fixed bottom-6 right-6 w-10 h-10 bg-purple-600 text-white rounded-full shadow-lg flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:bg-purple-700 z-50"><i data-lucide="chevron-up" class="w-5 h-5"></i></button>
+
+  <script is:inline>
+    lucide.createIcons();
+    var progressBar=document.getElementById('progress-bar');function updateProgress(){var s=window.scrollY,d=document.documentElement.scrollHeight-window.innerHeight;progressBar.style.width=(d>0?(s/d)*100:0)+'%';}
+    var backToTop=document.getElementById('back-to-top');function updateBackToTop(){if(window.scrollY>600){backToTop.classList.remove('opacity-0','pointer-events-none');backToTop.classList.add('opacity-100','pointer-events-auto');}else{backToTop.classList.add('opacity-0','pointer-events-none');backToTop.classList.remove('opacity-100','pointer-events-auto');}}
+    backToTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    var tocLinks=document.querySelectorAll('.toc-link');var sections=[];tocLinks.forEach(function(link){var id=link.getAttribute('href').substring(1);var el=document.getElementById(id);if(el)sections.push({id:id,el:el,link:link});});
+    function updateActiveToc(){var current=null;for(var i=0;i<sections.length;i++){if(sections[i].el.getBoundingClientRect().top<=120)current=sections[i].id;}tocLinks.forEach(function(link){link.classList.toggle('active',link.getAttribute('href').substring(1)===current);});}
+    var ticking=false;window.addEventListener('scroll',function(){if(!ticking){requestAnimationFrame(function(){updateProgress();updateBackToTop();updateActiveToc();ticking=false;});ticking=true;}},{passive:true});
+    document.getElementById('mobile-menu-btn').addEventListener('click',function(){document.getElementById('mobile-menu').classList.toggle('hidden');});
+    document.getElementById('copy-link-btn').addEventListener('click',function(){var btn=this;navigator.clipboard.writeText(window.location.href).then(function(){btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';btn.classList.add('bg-green-100','text-green-600');setTimeout(function(){btn.innerHTML='<i data-lucide="link" class="w-4 h-4"></i>';btn.classList.remove('bg-green-100','text-green-600');lucide.createIcons();},2000);});});});
+    var pt=encodeURIComponent(document.title);var pu=encodeURIComponent(window.location.href);document.querySelectorAll('.share-btn').forEach(function(btn){btn.addEventListener('click',function(){var p=btn.dataset.platform;var urls={twitter:'https://twitter.com/intent/tweet?text='+pt+'&url='+pu,linkedin:'https://www.linkedin.com/sharing/share-offsite/?url='+pu,whatsapp:'https://wa.me/?text='+pt+'%20'+pu};if(urls[p])window.open(urls[p],'_blank','noopener,noreferrer,width=600,height=400');});});
+    document.querySelectorAll('.faq-toggle').forEach(function(btn){btn.addEventListener('click',function(){var answer=btn.nextElementSibling;var chevron=btn.querySelector('.faq-chevron');var isOpen=answer.classList.contains('open');document.querySelectorAll('.faq-answer').forEach(function(a){a.classList.remove('open');});document.querySelectorAll('.faq-chevron').forEach(function(c){c.classList.remove('rotated');});document.querySelectorAll('.faq-toggle').forEach(function(t){t.setAttribute('aria-expanded','false');});if(!isOpen){answer.classList.add('open');chevron.classList.add('rotated');btn.setAttribute('aria-expanded','true');}});});});
+    var subBtn=document.getElementById('subscribe-btn');var subMsg=document.getElementById('subscribe-msg');var subInput=subBtn.previousElementSibling;
+    subBtn.addEventListener('click',function(){var email=subInput.value.trim();if(!email||!email.includes('@')){subMsg.textContent='Enter a valid email.';subMsg.classList.remove('hidden');subMsg.classList.add('text-red-300');return;}subBtn.textContent='Sending...';subBtn.disabled=true;setTimeout(function(){subBtn.textContent='✓ Done!';subInput.value='';subMsg.textContent="You're in.";subMsg.classList.remove('hidden','text-red-300');subMsg.classList.add('text-green-300');setTimeout(function(){subBtn.textContent='Subscribe';subBtn.disabled=false;subMsg.classList.add('hidden');},3000);},800);});
+    updateProgress();updateActiveToc();
+  </script>
+</body>
+</html>

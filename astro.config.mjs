@@ -1,19 +1,24 @@
 import { defineConfig } from 'astro/config';
 import keystatic from '@keystatic/astro';
 import react from '@astrojs/react';
-import markdoc from '@astrojs/markdoc'; // 1. Import Markdoc
+import markdoc from '@astrojs/markdoc';
 import cloudflare from '@astrojs/cloudflare';
+import tailwind from '@astrojs/tailwind';
 
+// https://astro.build/config
 export default defineConfig({
-  site: 'https://squidrbx.pages.dev', 
+  site: 'https://rwahq.pages.dev',
   
   integrations: [
     react(), 
-    markdoc(), // 2. Tambahkan Markdoc di sini agar file .mdoc terbaca
-    keystatic()
+    markdoc(), 
+    keystatic(),
+    tailwind({
+      applyBaseStyles: true,
+    })
   ],
   
-  output: 'static', 
+  output: 'server', 
   
   adapter: cloudflare({
     mode: 'directory'

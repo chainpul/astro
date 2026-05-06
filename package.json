@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.1.1",
+    "@astrojs/markdoc": "^0.12.0",
     "@astrojs/react": "^4.2.0",
+    "@astrojs/tailwind": "^6.0.0",
     "@keystatic/astro": "^5.0.6",
     "@keystatic/core": "^0.5.50",
     "@types/react": "^18.3.0",
@@ -22,7 +24,7 @@
     "lodash-es": "^4.18.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "use-sync-external-store": "^1.2.2",
-    "@astrojs/markdoc": "^0.12.0"
+    "tailwindcss": "^3.4.17",
+    "use-sync-external-store": "^1.2.2"
   }
 }

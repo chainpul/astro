@@ -5,7 +5,7 @@ export default config({
     kind: 'cloud',
   },
   cloud: {
-    project: 'chainpul/astro',
+    project: 'rwahq/astro',
   },
   ui: {
     brand: { name: 'SQUIDRBX' },

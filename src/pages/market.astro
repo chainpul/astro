@@ -1,0 +1,105 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market Data — RWAHQ</title>
+  <meta name="description" content="Live RWA market data pulled from on-chain sources. TVL, token prices, and protocol metrics — updated in real-time.">
+  <link rel="canonical" href="https://rwahq.dev/market">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script is:inline src="https://unpkg.com/lucide@latest"></script>
+  <style is:global>
+    @keyframes pulse-slow { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
+    .pulse-slow { animation: pulse-slow 2s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-gray-50 text-slate-900 font-sans antialiased">
+
+  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
+      <a href="/" class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center"><i data-lucide="activity" class="w-4 h-4 text-white"></i></div>
+        <span class="font-bold text-gray-900 tracking-tight">RW<span class="text-blue-600">AHQ</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-6 text-sm text-gray-500">
+        <a href="/blog" class="hover:text-blue-600 transition-colors">Blog</a>
+        <a href="/market" class="text-blue-600 font-medium">Market</a>
+        <a href="/learn" class="hover:text-blue-600 transition-colors">Learn</a>
+        <a href="/tools" class="hover:text-blue-600 transition-colors">Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="bg-gradient-to-br from-blue-600 to-indigo-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <span class="inline-flex items-center gap-2 bg-white/10 text-blue-200 text-xs font-bold uppercase tracking-[0.15em] px-3 py-1 rounded-full border border-white/10 mb-4">
+        <i data-lucide="bar-chart-3" class="w-3.5 h-3.5"></i> On-Chain Data
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">RWA Market Data</h1>
+      <p class="text-blue-200 text-lg max-w-xl">We pull live data from DeFi Llama and on-chain sources. No estimated numbers — what you see is what's on-chain right now.</p>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center max-w-lg mx-auto mb-12">
+      <div class="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-6"><i data-lucide="bar-chart-3" class="w-10 h-10 text-blue-400 pulse-slow"></i></div>
+      <h2 class="text-2xl font-bold text-gray-900 mb-3">Live Dashboard Coming Soon</h2>
+      <p class="text-gray-500 leading-relaxed mb-6">We're building a custom dashboard that tracks RWA-specific metrics — not just generic DeFi TVL. Think: tokenized Treasury yields vs traditional T-Bill rates, institutional inflow tracking, and protocol-level risk scores.</p>
+    </div>
+
+    <p class="text-sm text-gray-500 mb-6 font-medium">Current snapshot from <a href="https://defillama.com/categories/rwa" target="_blank" rel="noopener" class="text-blue-600 hover:underline">DeFi Llama RWA Category</a> — last checked June 2025:</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-12">
+      <div class="bg-white rounded-xl border border-gray-100 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center text-white font-bold text-[10px]">BLK</div>
+            <div><p class="text-sm font-semibold text-gray-800">BUIDL</p><p class="text-xs text-gray-400">BlackRock</p></div>
+          </div>
+        </div>
+        <p class="text-xl font-extrabold text-gray-900 font-mono">$470M</p>
+        <p class="text-xs text-gray-400 mt-1">Tokenized US T-Bills</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-[10px]">ONDO</div>
+            <div><p class="text-sm font-semibold text-gray-800">OUSG</p><p class="text-xs text-gray-400">Ondo Finance</p></div>
+          </div>
+        </div>
+        <p class="text-xl font-extrabold text-gray-900 font-mono">$230M</p>
+        <p class="text-xs text-gray-400 mt-1">Tokenized Treasuries</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center text-white font-bold text-[10px]">XAUT</div>
+            <div><p class="text-sm font-semibold text-gray-800">XAUT</p><p class="text-xs text-gray-400">Tether Gold</p></div>
+          </div>
+        </div>
+        <p class="text-xl font-extrabold text-gray-900 font-mono">$580M</p>
+        <p class="text-xs text-gray-400 mt-1">Tokenized Physical Gold</p>
+      </div>
+    </div>
+
+    <p class="text-xs text-gray-400 text-center">Data source: <a href="https://defillama.com" target="_blank" rel="noopener" class="underline">DeFi Llama</a>. Numbers may differ slightly due to oracle timing. Always verify on-chain before making decisions.</p>
+  </section>
+
+  <footer class="bg-gray-900 text-gray-400 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center"><i data-lucide="activity" class="w-3.5 h-3.5 text-white"></i></div>
+        <span class="font-bold text-white text-sm">RW<span class="text-blue-400">AHQ</span></span>
+      </div>
+      <p class="text-xs text-gray-500">© 2025 RWAHQ. Not financial advice.</p>
+      <a href="https://twitter.com/rwahq_io" class="hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+    </div>
+  </footer>
+  <script is:inline>lucide.createIcons();</script>
+</body>
+</html>

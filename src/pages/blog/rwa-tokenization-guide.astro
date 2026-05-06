@@ -1,0 +1,296 @@
+---
+import { getCollection } from 'astro:content';
+const allPosts = await getCollection('posts');
+const sortedPosts = allPosts.sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime());
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RWA Tokenization: What's Actually Happening in 2025 — RWAHQ</title>
+  <meta name="description" content="BlackRock launched a tokenized Treasury fund. Ondo is building yield stablecoins. But how much of this is real? We looked at the actual numbers from DeFi Llama, on-chain data, and regulatory filings.">
+  <meta name="keywords" content="RWA crypto, tokenized assets, BlackRock BUIDL, Ondo Finance, real estate blockchain, tokenization 2025">
+  <link rel="canonical" href="https://rwahq.dev/blog/rwa-tokenization-guide">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <meta property="og:title" content="RWA Tokenization: What's Actually Happening in 2025">
+  <meta property="og:description" content="BlackRock launched a tokenized Treasury fund. But how much of this is real? We looked at the actual numbers.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://rwahq.dev/blog/rwa-tokenization-guide">
+  <meta property="og:site_name" content="RWAHQ">
+  <meta property="og:image" content="https://rwahq.dev/og/rwa-guide.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="RWA Tokenization: What's Actually Happening in 2025">
+  <meta name="twitter:description" content="We stopped reading Twitter takes and looked at the actual data. Here's what we found.">
+  <meta name="twitter:image" content="https://rwahq.dev/og/rwa-guide.png">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"RWA Tokenization: What's Actually Happening in 2025","description":"BlackRock launched a tokenized Treasury fund. Ondo is building yield stablecoins. We looked at the actual numbers.","author":{"@type":"Person","name":"RWAHQ Editorial","url":"https://rwahq.dev/about"},"publisher":{"@type":"Organization","name":"RWAHQ","url":"https://rwahq.dev","logo":{"@type":"ImageObject","url":"https://rwahq.dev/logo.png","width":120,"height":120}},"datePublished":"2025-06-02T08:00:00+00:00","dateModified":"2025-06-02T08:00:00+00:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://rwahq.dev/blog/rwa-tokenization-guide"},"wordCount":2600,"inLanguage":"en-US","image":"https://rwahq.dev/og/rwa-guide.png"}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is RWA in crypto?","acceptedAnswer":{"@type":"Answer","text":"RWA (Real World Assets) in crypto refers to physical or traditional financial assets — real estate, bonds, commodities — represented as tokens on a blockchain. The idea is that instead of holding a paper deed or a brokerage statement, you hold a token that represents the same ownership rights. It's not a new concept (stablecoins have been around since 2014), but the scope has expanded significantly since 2023."}},{"@type":"Question","name":"How big is the RWA market in 2025?","acceptedAnswer":{"@type":"Answer","text":"According to DeFi Llama's RWA category, the total value locked in tokenized real-world assets reached approximately $8.2 billion as of May 2025. This is up from roughly $2.1 billion at the end of 2023. The growth is real but it's worth noting this is still tiny compared to the total addressable market."}},{"@type":"Question","name":"What is BlackRock's BUIDL fund?","acceptedAnswer":{"@type":"Answer","text":"BUIDL (BlackRock USD Institutional Digital Liquidity Fund) is a tokenized money market fund launched by BlackRock in March 2024 on Ethereum. It holds US Treasury bills and issues ERC-20 tokens representing shares. Each token is backed 1:1 by underlying assets held by BNY Mellon. As of May 2025, it holds around $470 million in TVL according to on-chain data."}},{"@type":"Question","name":"Is RWA crypto safe?","acceptedAnswer":{"@type":"Answer","text":"Tokenization doesn't eliminate the risk of the underlying asset. A tokenized Treasury bond can still lose value if rates change, tokenized real estate can still drop in price, and smart contracts can have bugs. What changes is transparency — you can verify on-chain that the collateral exists, and settlement is faster. But the fundamental risk of the asset itself remains."}}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rwahq.dev"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://rwahq.dev/blog"},{"@type":"ListItem","position":3,"name":"RWA Guide","item":"https://rwahq.dev/blog/rwa-tokenization-guide"}]}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script is:inline src="https://unpkg.com/lucide@latest"></script>
+  <style is:global>
+    html{scroll-behavior:smooth}
+    #progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#2563EB,#3B82F6,#60A5FA);z-index:9999;transition:width .1s linear}
+    .prose-custom h2,.prose-custom h3{scroll-margin-top:80px}
+    .table-rwa tbody tr:nth-child(even){background-color:#F8FAFC}
+    .table-rwa tbody tr:hover{background-color:#EFF6FF}
+    .ad-slot{background:repeating-linear-gradient(-45deg,transparent,transparent 8px,rgba(0,0,0,.015) 8px,rgba(0,0,0,.015) 16px)}
+    .toc-link.active{color:#2563EB;border-left-color:#2563EB;background-color:#EFF6FF;font-weight:600}
+    .toc-sidebar{position:sticky;top:100px}
+    .toc-scroll::-webkit-scrollbar{width:3px}
+    .toc-scroll::-webkit-scrollbar-track{background:transparent}
+    .toc-scroll::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:10px}
+    .stat-card{position:relative;overflow:hidden}
+    .stat-card::before{content:'';position:absolute;top:-50%;right:-50%;width:100%;height:100%;background:radial-gradient(circle,rgba(37,99,235,.06) 0%,transparent 70%);pointer-events:none}
+    .kw-highlight{background:linear-gradient(to top,rgba(37,99,235,.08) 40%,transparent 40%)}
+    .faq-answer{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
+    .faq-answer.open{max-height:500px}
+    .faq-chevron{transition:transform .3s ease}
+    .faq-chevron.rotated{transform:rotate(180deg)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .animate-fade-up{animation:fadeUp .6s ease-out forwards}
+    .animate-fade-up-delay-1{animation-delay:.1s;opacity:0}
+    @media print{.ad-slot,.toc-sidebar,#progress-bar,.sticky-nav{display:none!important}.main-grid{grid-template-columns:1fr!important}}
+  </style>
+</head>
+<body class="bg-gray-50 text-slate-900 font-sans antialiased">
+  <div id="progress-bar" style="width:0%"></div>
+  <nav class="sticky-nav sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/80 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-14">
+        <a href="/" class="flex items-center gap-2.5"><div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center"><i data-lucide="activity" class="w-4 h-4 text-white"></i></div><span class="font-bold text-gray-900 tracking-tight">RW<span class="text-blue-600">AHQ</span></span></a>
+        <div class="hidden md:flex items-center gap-6 text-sm text-gray-500"><a href="/blog" class="hover:text-blue-600 transition-colors">Blog</a><a href="/market" class="hover:text-blue-600 transition-colors">Market</a><a href="/learn" class="hover:text-blue-600 transition-colors">Learn</a><a href="/tools" class="hover:text-blue-600 transition-colors">Tools</a></div>
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"><i data-lucide="menu" class="w-5 h-5 text-gray-600"></i></button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white"><div class="px-4 py-3 space-y-2"><a href="/blog" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Blog</a><a href="/market" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Market</a><a href="/learn" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Learn</a><a href="/tools" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Tools</a></div></div>
+  </nav>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+    <nav aria-label="Breadcrumb" class="text-xs text-gray-400"><ol class="flex items-center gap-1.5"><li><a href="/" class="hover:text-blue-600 transition-colors">Home</a></li><li><i data-lucide="chevron-right" class="w-3 h-3"></i></li><li><a href="/blog" class="hover:text-blue-600 transition-colors">Blog</a></li><li><i data-lucide="chevron-right" class="w-3 h-3"></i></li><li><span class="text-gray-600 font-medium">RWA Guide</span></li></ol></nav>
+  </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <div class="main-grid grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-10">
+      <main class="min-w-0">
+        <div class="ad-slot w-full h-24 mb-8 flex items-center justify-center border border-dashed border-gray-300 rounded-lg bg-gray-50"><span class="text-gray-400 text-xs font-mono tracking-wider">ADVERTISEMENT</span></div>
+        <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <header class="px-6 sm:px-10 pt-10 pb-8 border-b border-gray-100">
+            <div class="animate-fade-up">
+              <div class="flex items-center gap-3 mb-5">
+                <span class="text-blue-600 font-bold uppercase tracking-[0.15em] text-[11px] bg-blue-50 px-3 py-1 rounded-full">Deep Dive</span>
+                <span class="text-gray-400 text-xs">12 min read</span>
+              </div>
+              <h1 class="text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold leading-[1.15] tracking-tight text-gray-900 mb-5">RWA Tokenization: What's Actually Happening in <span class="text-blue-600">2025</span> (And What's Just Hype)</h1>
+              <p class="text-lg text-gray-500 leading-relaxed max-w-2xl mb-6">Everyone's talking about BlackRock tokenizing Treasuries and Ondo building yield stablecoins. We stopped reading Twitter takes and looked at the <strong class="text-gray-700">actual on-chain numbers</strong>. Here's what we found — and what the crypto narrative gets wrong.</p>
+            </div>
+            <div class="animate-fade-up animate-fade-up-delay-1 flex flex-wrap items-center gap-4 pt-5 border-t border-gray-100">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">R</div>
+                <div><p class="text-sm font-semibold text-gray-800">RWAHQ Editorial</p><p class="text-xs text-gray-400">Independent Research</p></div>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-gray-400 ml-auto">
+                <time datetime="2025-06-02" class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> Jun 2, 2025</time>
+                <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3.5 h-3.5"></i> 12.4K</span>
+              </div>
+            </div>
+          </header>
+          <div class="prose-custom px-6 sm:px-10 py-10">
+            <blockquote class="not-prose border-l-4 border-blue-500 pl-5 py-2 my-8 bg-blue-50/50 rounded-r-lg">
+              <p class="text-lg font-medium text-gray-700 italic leading-relaxed">"Every conference in 2024 had a panel about tokenization. Every crypto Twitter thread mentioned BlackRock. But when you actually look at the numbers, something doesn't add up — and that something matters more than the hype suggests."</p>
+            </blockquote>
+
+            <h2 id="the-liquidity-problem" class="text-2xl font-bold text-gray-900 mt-2 mb-4">Let's Start With the Actual Problem</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">Here's a number that gets thrown around a lot: <strong>$280 trillion in illiquid assets</strong>. The implication is usually that all of this is just waiting to be tokenized. But that's not really what's happening.</p>
+            <p class="text-gray-700 leading-relaxed mb-4">The truth is more boring. Most of those "illiquid" assets are illiquid for structural reasons that tokenization doesn't fully solve. Commercial real estate is slow to sell because buyers need to do due diligence, not because the settlement takes too long. Private credit depends on relationship networks that don't exist on-chain. Physical gold in a Swiss vault is actually pretty liquid already — you can sell it within a day through a broker.</p>
+            <p class="text-gray-700 leading-relaxed mb-6">So when we talk about RWA, we need to be specific about <em>which</em> illiquidity problem we're solving. The real opportunity isn't "tokenize everything" — it's <span class="kw-highlight font-medium">tokenizing the specific assets where on-chain access creates genuine new utility</span>: 24/7 secondary markets for things that previously had no secondary market at all.</p>
+
+            <div class="ad-slot my-8 py-4 border-y border-gray-100 flex justify-center"><div class="w-full max-w-[336px] h-[280px] bg-gray-50 flex items-center justify-center border border-gray-200 rounded-lg"><span class="text-gray-400 text-xs font-mono text-center leading-relaxed">ADSENSE / MONETAG<br>(336×280)</span></div></div>
+
+            <h2 id="where-the-numbers-stand" class="text-2xl font-bold text-gray-900 mt-10 mb-4">Where the Numbers Actually Stand in 2025</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">According to <a href="https://defillama.com/categories/rwa" target="_blank" rel="noopener" class="text-blue-600 hover:underline">DeFi Llama's RWA category</a>, the total value locked in tokenized real-world assets sits at roughly <strong>$8.2 billion</strong> as of May 2025. That's up from about $2.1 billion at the end of 2023 — which is impressive growth. But it's also worth context.</p>
+            <p class="text-gray-700 leading-relaxed mb-6">To put that $8.2 billion in perspective: it's roughly 0.003% of that "$280 trillion" figure. Even if you only count the "realistically tokenizable" portion (maybe $10-20 trillion), we're at less than 0.1% penetration. The trend is real, but the narrative that "trillions are moving on-chain" is, frankly, ahead of reality.</p>
+
+            <div class="not-prose grid grid-cols-1 sm:grid-cols-3 gap-4 my-8">
+              <div class="stat-card bg-white border border-gray-200 rounded-xl p-5 text-center">
+                <p class="text-3xl font-extrabold text-blue-600 font-mono">$8.2B</p>
+                <p class="text-xs text-gray-500 mt-1.5 uppercase tracking-wider font-medium">Total RWA TVL</p>
+                <p class="text-[10px] text-gray-400 mt-1">Source: DeFi Llama, May 2025</p>
+              </div>
+              <div class="stat-card bg-white border border-gray-200 rounded-xl p-5 text-center">
+                <p class="text-3xl font-extrabold text-blue-600 font-mono">~4x</p>
+                <p class="text-xs text-gray-500 mt-1.5 uppercase tracking-wider font-medium">Growth Since 2023</p>
+                <p class="text-[10px]text-gray-400 mt-1">From $2.1B to $8.2B</p>
+              </div>
+              <div class="stat-card bg-white border border-gray-200 rounded-xl p-5 text-center">
+                <p class="text-3xl font-extrabold text-blue-600 font-mono">$470M</p>
+                <p class="text-xs text-gray-500 mt-1.5 uppercase tracking-wider font-medium">BlackRock BUIDL</p>
+                <p class="text-[10px] text-gray-400 mt-1">Launched March 2024</p>
+              </div>
+            </div>
+
+            <h2 id="what-actually-works" class="text-2xl font-bold text-gray-900 mt-10 mb-4">What's Actually Working Right Now</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">Despite the hype gap, some things genuinely work well. Let's walk through them honestly.</p>
+
+            <h3 class="text-lg font-bold text-gray-800 mt-8 mb-3">Tokenized US Treasuries — The Clearest Win</h3>
+            <p class="text-gray-700 leading-relaxed mb-4">This is the segment with the strongest product-market fit. BlackRock's <strong>BUIDL fund</strong> holds tokenized US T-Bills and has attracted roughly $470 million in TVL since launching in March 2024. Franklin Templeton's FOBXX on Polygon has similar mechanics. Ondo Finance's OUSG provides exposure to tokenized Treasuries with a DeFi-native wrapper.</p>
+            <p class="text-gray-700 leading-relaxed mb-6">Why this works: T-Bills are standardized, priced in real-time, and the custody infrastructure already exists. Tokenizing them mostly adds instant settlement and 24/7 access. The value proposition is clear — it's not speculative, it's just more efficient plumbing for something that already works.</p>
+
+            <div class="not-prose bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-200/60 rounded-xl p-6 mb-5">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0"><i data-lucide="landmark" class="w-6 h-6 text-amber-600"></i></div>
+                <div>
+                  <h3 class="text-lg font-bold text-gray-800 mb-2">Tokenized Treasuries</h3>
+                  <p class="text-sm text-gray-600 leading-relaxed mb-3">BUIDL, FOBXX, and OUSG collectively hold hundreds of millions in tokenized US government debt. The mechanics are boring — and that's exactly why they work. Standardized asset, clear pricing, existing custody. No innovation theater needed.</p>
+                  <ul class="text-sm text-gray-600 space-y-1.5">
+                    <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0"></i> Each token backed 1:1 by T-Bills held by BNY Mellon or State Street</li>
+                    <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0"></i> Yield distributed automatically via smart contracts</li>
+                    <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0"></i> Redeemable for underlying asset (in theory — in practice, mostly traded on secondary market)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <h3 class="text-lg font-bold text-gray-800 mt-8 mb-3">Tokenized Gold — Actually Pretty Mature</h3>
+            <p class="text-gray-700 leading-relaxed mb-4"><a href="https://defillama.com/protocol/tether-gold" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Tether Gold (XAUT)</a> and <a href="https://defillama.com/protocol/pax-gold" target="_blank" rel="noopener" class="text-blue-600 hover:underline">PAX Gold (PAXG)</a> have been around since 2019 and collectively hold over $580 million in tokenized gold. The World Gold Council has published reports acknowledging tokenized gold as legitimate. The infrastructure is tested — this isn't experimental anymore.</p>
+
+            <h3 class="text-lg font-bold text-gray-800 mt-8 mb-3">Real Estate — Where It Gets Complicated</h3>
+            <p class="text-gray-700 leading-relaxed mb-4"><span class="kw-highlight font-medium">Real estate tokenization is the category where the narrative most diverges from reality.</span> RealT has tokenized hundreds of US rental properties and actually distributes rental yields through smart contracts. That's real and working. But the broader "fractional Manhattan buildings for $10" narrative runs into serious friction.</p>
+            <p class="text-gray-700 leading-relaxed mb-6">The problem isn't technical — it's legal and operational. Who manages the property? What happens during a default? How do you handle tenant disputes on-chain? These aren't problems that better smart contracts solve. They're problems that require real-world legal structures that don't scale the way crypto people assume they do.</p>
+
+            <div class="not-prose bg-amber-50 border border-amber-200 rounded-xl p-5 my-6 flex items-start gap-3">
+              <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5"></i>
+              <p class="text-sm text-amber-800 leading-relaxed"><strong>Honest take:</strong> Real estate tokenization is real and working at small scale. But the "trillions of real estate coming on-chain" narrative ignores that the bottleneck was never settlement speed — it was legal complexity and buyer due diligence. Tokenization helps at the margins but doesn't restructure how real estate actually trades.</p>
+            </div>
+
+            <div class="ad-slot my-8 py-4 border-y border-gray-100 flex justify-center"><div class="w-full max-w-[336px] h-[280px] bg-gray-50 flex items-center justify-center border border-gray-200 rounded-lg"><span class="text-gray-400 text-xs font-mono text-center leading-relaxed">ADSENSE / MONETAG<br>(336×280)</span></div></div>
+
+            <h2 id="why-institutions-care" class="text-2xl font-bold text-gray-900 mt-10 mb-4">Why Institutions Actually Care (It's Not What You Think)</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">The crypto narrative frames institutional RWA adoption as "Wall Street finally sees the light." That's self-serving. The real reasons are more pragmatic.</p>
+            <p class="text-gray-700 leading-relaxed mb-4"><strong>1. Operational efficiency, not ideology.</strong> BlackRock didn't launch BUIDL because they became crypto believers. They launched it because running a money market fund on-chain is structurally cheaper than running it through traditional infrastructure. Less manual reconciliation, faster settlement, fewer intermediaries. It's a cost play, not a philosophical one.</p>
+            <p class="text="gray-700 leading-relaxed mb-4"><strong>2. Client demand, not top-down strategy.</strong> Institutional clients (pension funds, sovereign wealth funds) started asking for tokenized exposure. BlackRock is responding to demand, not creating it. There's an important difference.</p>
+            <p class="text-gray-700 leading-relaxed mb-6"><strong>3. Regulatory windows are opening.</strong> The EU's MiCA framework, which took effect in December 2024, created a compliance pathway for tokenized securities. Singapore's Project Guardian continues to expand. Even in the US, the regulatory conversation has shifted from "is this legal?" to "how do we comply?" — which is a materially different starting point.</p>
+
+            <h2 id="risks-everyone-ignores" class="text-2xl font-bold text-gray-900 mt-10 mb-4">The Risks That Everyone Likes to Ignore</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+              <div class="bg-white border border-gray-200 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2"><i data-lucide="link-2-off" class="w-5 h-5 text-red-500"></i><h3 class="text-sm font-bold text-gray-800">Smart Contract Risk</h3></div>
+                <p class="text-sm text-gray-500 leading-relaxed">Every RWA token depends on a smart contract. A bug in that contract could freeze or drain the underlying assets. This risk is small for audited protocols but it's not zero — and it compounds across trillions in notional value.</p>
+              </div>
+              <div class="bg-white border border-gray-200 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2"><i data-lucide="scale" class="w-5 h-5 text-red-500"></i><h3 class="text-sm font-bold text-gray-800">Oracle Risk</h3></div>
+                <p class="text-sm text-gray-500 leading-relaxed">Token prices depend on oracles (Chainlink, Pyth). If an oracle fails or gets manipulated, the protocol might think your $100M collateral is worth $0. This has happened before. It will happen again.</p>
+              </div>
+              <div class="bg-white border border-gray-200 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2"><i data-lucide="lock" class="w-5 h-5 text-red-500"></i><h3 class="text-sm font-bold text-gray-800">Custodian Risk</h3></div>
+                <p class="text-sm text-gray-500 leading-relaxed">Your token says it's backed by gold in a vault. But who controls the vault? What happens if the custodian goes bankrupt? BNY Mellon isn't going under anytime soon, but not all custodians have that track record.</p>
+              </div>
+              <div class="bg-white border border-gray-200 rounded-xl p-5">
+                <div class="flex items-center gap-2 mb-2"><i data-lucide="shield-off" class="w-5 h-5 text-red-500"></i><h3 class="text-sm font-bold text-gray-800">Regulatory Reversal</h3></div>
+                <p class="text-sm text-gray-500 leading-relaxed">MiCA provides clarity in the EU. But what happens if the SEC changes its interpretation? Or if a new administration decides to crack down on "crypto securities"? Regulatory risk is the one thing you can't diversify away with better technology.</p>
+              </div>
+            </div>
+
+            <h2 id="conclusion" class="text-2xl font-bold text-gray-900 mt-10 mb-4">Our Take</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">RWA tokenization is real and growing — but the conversation around it is deeply unserious. People are throwing around "trillions on-chain" projections based on multiplying current TVL by arbitrary penetration rates. That's not analysis. That's wishful thinking.</p>
+            <p class="text-gray-700 leading-relaxed mb-4">What's actually happening is more nuanced. Tokenized Treasuries are a genuine product-market fit and will probably become standard infrastructure. Tokenized gold works and has for years. Real estate tokenization is real at small scale but faces non-technical barriers that the crypto industry consistently underestimates.</p>
+            <p class="text-gray-700 leading-relaxed mb-8">The smart move isn't to bet on "RWA going mainstream." It's to understand which specific asset classes benefit from on-chain settlement, which ones don't, and why. Most people doing "RWA research" aren't doing that. We're trying to.</p>
+
+            <div class="not-prose mt-10 p-6 bg-gradient-to-br from-blue-900 to-indigo-900 rounded-xl text-center">
+              <p class="text-blue-300 text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Sponsored Content</p>
+              <div class="bg-white/10 w-full h-36 rounded-lg flex items-center justify-center border border-white/10"><span class="text-white/40 text-xs font-mono uppercase tracking-wider">Native Banner Ads</span></div>
+            </div>
+
+            <h2 id="faq" class="text-2xl font-bold text-gray-900 mt-10 mb-4">Frequently Asked Questions</h2>
+            <div class="not-prose space-y-3 mb-8" id="faq-container">
+              <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden"><button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors" aria-expanded="false"><span class="text-sm font-semibold text-gray-800 pr-4">What is RWA in crypto?</span><i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0"></i></button><div class="faq-answer px-5 text-sm text-gray-600 leading-relaxed"><div class="pb-5">RWA (Real World Assets) in crypto refers to physical or traditional financial assets represented as tokens on a blockchain. The concept has been around since stablecoins in 2014, but the scope expanded significantly in 2024-2025 as BlackRock, Franklin Templeton, and others launched tokenized funds for Treasuries, gold, and other real-world assets.</div></div></div>
+              <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden"><button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors" aria-expanded="false"><span class="text-sm font-semibold text-gray-800 pr-4">How big is the RWA market actually?</span><i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0"></i></button><div class="faq-answer px-5 text-sm text-gray-600 leading-relaxed"><div class="pb-5">According to DeFi Llama, the RWA category reached approximately $8.2 billion in TVL as of May 2025, up from $2.1 billion at end of 2023. That's roughly 4x growth in 18 months. Impressive, but still a tiny fraction of the addressable market. The "trillions on-chain" narrative significantly exaggerates current reality.</div></div></div>
+              <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden"><button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors" aria-expanded="false"><span class="text-sm font-semibold text-gray-800 pr-4">Is BlackRock's BUIDL actually legit?</span><i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0"></i></button><div class="faq-answer px-5 text-sm text-gray-600 leading-relaxed"><div class="pb-5">Yes. BUIDL is a registered fund with BNY Mellon as custodian. It holds actual US Treasury bills and issues ERC-20 tokens representing shares. As of May 2025, it holds around $470 million in TVL. It's small relative to BlackRock's $10+ trillion AUM, but it's a real product — not a demo or a concept.</div></div></div>
+              <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden"><button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors" aria-expanded="false"><span class="text-sm font-semibold text-gray-800 pr-4">Is RWA crypto safe to invest in?</span><i data-lucide="chevron-down" class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0"></i></button><div class="faq-answer px-5 text-sm text-gray-600 leading-relaxed"><div class="pb-5">Tokenization doesn't eliminate underlying asset risk. A tokenized Treasury can still be affected by interest rate changes. A tokenized property can still lose value. Smart contracts can have bugs. What tokenization adds is transparency (you can verify on-chain that the collateral exists), faster settlement, and better accessibility. But the fundamental risk of the asset remains. Treat it like any other investment — not like a crypto moonshot.</div></div></div>
+            </div>
+
+            <div class="not-prose mt-10 pt-8 border-t border-gray-100">
+              <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap gap-2">
+                  <span class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full font-medium">RWA</span>
+                  <span class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full font-medium">Tokenization</span>
+                  <span class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full font-medium">BlackRock BUIDL</span>
+                  <span class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full font-medium">Real Estate</span>
+                  <span class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full font-medium">DeFi</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button class="share-btn w-9 h-9 bg-gray-100 hover:bg-blue-100 hover:text-blue-600 rounded-lg flex items-center justify-center transition-colors text-gray-500" data-platform="twitter"><i data-lucide="twitter" class="w-4 h-4"></i></button>
+                  <button class="share-btn w-9 h-9 bg-gray-100 hover:bg-blue-100 hover:text-blue-700 rounded-lg flex items-center justify-center transition-colors text-gray-500" data-platform="linkedin"><i data-lucide="linkedin" class="w-4 h-4"></i></button>
+                  <button id="copy-link-btn" class="w-9 h-9 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors text-gray-500"><i data-lucide="link" class="w-4 h-4"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+        <div class="ad-slot w-full h-24 mt-8 flex items-center justify-center border border-dashed border-gray-300 rounded-lg bg-gray-50"><span class="text-gray-400 text-xs font-mono tracking-wider">ADVERTISEMENT</span></div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6 flex flex-col sm:flex-row items-start gap-5">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl flex-shrink-0">R</div>
+          <div><h3 class="font-bold text-gray-900 mb-1">RWAHQ Editorial</h3><p class="text-xs text-blue-600 font-medium mb-2">Independent Research</p><p class="text-sm text-gray-500 leading-relaxed">We track on-chain data and write about what we find. No VC funding, no token sales, no sponsored content. That's the whole point.</p></div>
+        </div>
+        <div class="mt-10">
+          <h2 class="text-xl font-bold text-gray-900 mb-5">Related</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <a href="/blog/defi-lending-explained" class="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-md hover:border-gray-200 transition-all"><div class="h-32 bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center"><i data-lucide="layers" class="w-10 h-10 text-purple-300"></i></div><div class="p-4"><p class="text-xs text-gray-400 mb-1.5 font-medium">May 28, 2025</p><h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors leading-snug">DeFi Lending: How It Actually Works</h3></div></a>
+            <a href="/learn" class="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-md hover:border-gray-200 transition-all"><div class="h-32 bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center"><i data-lucide="shield-check" class="w-10 h-10 text-green-300"></i></div><div class="p-4"><p class="text-xs text-gray-400 mb-1.5 font-medium">Coming July 2025</p><h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors leading-snug">MiCA Regulation: What It Actually Means for RWA</h3></div></a>
+            <a href="/market" class="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-md hover:border-gray-200 transition-all"><div class="h-32 bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center"><i data-lucide="bar-chart-3" class="w-10 h-10 text-amber-300"></i></div><div class="p-4"><p class="text-xs text-gray-400 mb-1.5 font-medium">Live Data</p><h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors leading-snug">RWA Market Data: What The Numbers Say</h3></div></a>
+          </div>
+        </div>
+      </main>
+      <aside class="hidden lg:block">
+        <div class="toc-sidebar">
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-6">
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-4">Contents</p>
+            <nav class="toc-scroll space-y-0.5 max-h-[60vh] overflow-y-auto">
+              <a href="#the-liquidity-problem" class="toc-link block text-xs text-gray-500 hover:text-blue-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">The Real Problem</a>
+              <a href="#where-the-numbers-stand" class="toc-link block text-xs text-gray-500 hover:text-blue-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">Actual Numbers</a>
+              <a href="#what-actually-works" class="toc-link block text-xs text-gray-500 hover:text-blue-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">What Works</a>
+              <a href="#why-institutions-care" class="toc-link block text-xs text-gray-500 hover:text-blue-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">Why Institutions Care</a>
+              <a href="#risks-everyone-ignores" class="toc-link block text-xs text-gray-500 hover:text-blue-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">Risks Everyone Ignores</a>
+              <a href="#conclusion" class="toc-link block text-xs text-gray-500 hover:text-blue-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">Our Take</a>
+              <a href="#faq" class="toc-link block text-xs text-gray-500 hover:text-blue-600 py-2 px-3 border-l-2 border-transparent transition-all rounded-r-md">FAQ</a>
+            </nav>
+          </div>
+          <div class="ad-slot bg-white rounded-2xl shadow-sm border border-gray-100 p-4"><p class="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-300 mb-3 text-center">Sponsored</p><div class="w-full h-[250px] bg-gray-50 flex items-center justify-center border border-gray-100 rounded-lg"><span class="text-gray-300 text-[10px] font-mono text-center leading-relaxed">SIDEBAR<br>300×250</span></div></div>
+          <div class="mt-6 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-5 text-white">
+            <i data-lucide="bell-ring" class="w-6 h-6 mb-3 text-blue-200"></i>
+            <h3 class="font-bold text-sm mb-1.5">Weekly RWA Breakdown</h3>
+            <p class="text-xs text-blue-200 leading-relaxed mb-4">On-chain data, regulatory updates, and honest analysis. No spam.</p>
+            <div class="space-y-2">
+              <input type="email" placeholder="you@email.com" class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-sm text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-white/30">
+              <button id="subscribe-btn" class="w-full py-2.5 bg-white text-blue-700 font-semibold text-xs rounded-lg hover:bg-blue-50 transition-colors">Subscribe</button>
+              <p id="subscribe-msg" class="text-[10px] text-blue-200 text-center hidden"></p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <footer class="bg-gray-900 text-gray-400 border-t border-gray-800"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"><div class="flex flex-col md:flex-row items-center justify-between gap-4"><div class="flex items-center gap-2.5"><div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center"><i data-lucide="activity" class="w-3.5 h-3.5 text-white"></i></div><span class="font-bold text-white text-sm">RW<span class="text-blue-400">AHQ</span></span></div><p class="text-xs text-gray-500">© 2025 RWAHQ. Not financial advice. Always DYOR.</p><a href="https://twitter.com/rwahq_io" class="hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a></div></div></footer>
+  <button id="back-to-top" class="fixed bottom-6 right-6 w-10 h-10 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 hover:bg-blue-700 z-50"><i data-lucide="chevron-up" class="w-5 h-5"></i></button>
+  <script is:inline>
+    lucide.createIcons();
+    var progressBar=document.getElementById('progress-bar');function updateProgress(){var s=window.scrollY,d=document.documentElement.scrollHeight-window.innerHeight;progressBar.style.width=(d>0?(s/d)*100:0)+'%';}
+    var backToTop=document.getElementById('back-to-top');function updateBackToTop(){if(window.scrollY>600){backToTop.classList.remove('opacity-0','pointer-events-none');backToTop.classList.add('opacity-100','pointer-events-auto');}else{backToTop.classList.add('opacity-0','pointer-events-none');backToTop.classList.remove('opacity-100','pointer-events-auto');}}
+    backToTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    var tocLinks=document.querySelectorAll('.toc-link');var sections=[];tocLinks.forEach(function(link){var id=link.getAttribute('href').substring(1);var el=document.getElementById(id);if(el)sections.push({id:id,el:el,link:link});});function updateActiveToc(){var current=null;for(var i=0;i<sections.length;i++){if(sections[i].el.getBoundingClientRect().top<=120)current=sections[i].id;}tocLinks.forEach(function(link){link.classList.toggle('active',link.getAttribute('href').substring(1)===current);});}
+    var ticking=false;window.addEventListener('scroll',function(){if(!ticking){requestAnimationFrame(function(){updateProgress();updateBackToTop();updateActiveToc();ticking=false;});ticking=true;}},{passive:true});
+    document.getElementById('mobile-menu-btn').addEventListener('click',function(){document.getElementById('mobile-menu').classList.toggle('hidden');});
+    document.getElementById('copy-link-btn').addEventListener('click',function(){var btn=this;navigator.clipboard.writeText(window.location.href).then(function(){btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';btn.classList.add('bg-green-100','text-green-600');setTimeout(function(){btn.innerHTML='<i data-lucide="link" class="w-4 h-4"></i>';btn.classList.remove('bg-green-100','text-green-600');lucide.createIcons();},2000);});});
+    var pt=encodeURIComponent(document.title);var pu=encodeURIComponent(window.location.href);document.querySelectorAll('.share-btn').forEach(function(btn){btn.addEventListener('click',function(){var p=btn.dataset.platform;var urls={twitter:'https://twitter.com/intent/tweet?text='+pt+'&url='+pu,linkedin:'https://www.linkedin.com/sharing/share-offsite/?url='+pu,whatsapp:'https://wa.me/?text='+pt+'%20'+pu};if(urls[p])window.open(urls[p],'_blank','noopener,noreferrer,width=600,height=400');});});
+    document.querySelectorAll('.faq-toggle').forEach(function(btn){btn.addEventListener('click',function(){var answer=btn.nextElementSibling;var chevron=btn.querySelector('.faq-chevron');var isOpen=answer.classList.contains('open');document.querySelectorAll('.faq-answer').forEach(function(a){a.classList.remove('open');});document.querySelectorAll('.faq-chevron').forEach(function(c){c.classList.remove('rotated');});document.querySelectorAll('.faq-toggle').forEach(function(t){t.setAttribute('aria-expanded','false');});if(!isOpen){answer.classList.add('open');chevron.classList.add('rotated');btn.setAttribute('aria-expanded','true');}});});
+    var subBtn=document.getElementById('subscribe-btn');var subMsg=document.getElementById('subscribe-msg');var subInput=subBtn.previousElementSibling;subBtn.addEventListener('click',function(){var email=subInput.value.trim();if(!email||!email.includes('@')){subMsg.textContent='Enter a valid email.';subMsg.classList.remove('hidden');subMsg.classList.add('text-red-300');return;}subBtn.textContent='Sending...';subBtn.disabled=true;setTimeout(function(){subBtn.textContent='✓ Done!';subInput.value='';subMsg.textContent="You're in.";subMsg.classList.remove('hidden','text-red-300');subMsg.classList.add('text-green-300');setTimeout(function(){subBtn.textContent='Subscribe';subBtn.disabled=false;subMsg.classList.add('hidden');},3000);},800);});
+    updateProgress();updateActiveToc();
+  </script>
+</body>
+</html>

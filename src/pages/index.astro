@@ -1,50 +1,291 @@
 ---
-// 1. Import fungsi untuk mengambil data koleksi
 import { getCollection } from 'astro:content';
-
-// 2. Ambil semua data dan urutkan berdasarkan tanggal terbaru
 const allPosts = await getCollection('posts');
 const sortedPosts = allPosts.sort((a, b) => {
   return new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime();
 });
 ---
 
-<html lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chainpulse - Daftar Postingan</title>
-    <style>
-      body { font-family: 'Inter', sans-serif; max-width: 800px; margin: auto; padding: 20px; line-height: 1.6; background: #f4f7f6; color: #333; }
-      h1 { color: #1a1a1a; text-align: center; margin-bottom: 30px; letter-spacing: -1px; }
-      ul { list-style: none; padding: 0; }
-      li { margin-bottom: 20px; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }
-      li:hover { transform: translateY(-3px); }
-      a { text-decoration: none; color: #2563eb; font-weight: bold; font-size: 1.2rem; display: block; margin-bottom: 5px; }
-      a:hover { color: #1d4ed8; }
-      small { color: #6b7280; font-size: 0.9rem; }
-      hr { border: 0; border-top: 1px solid #e5e7eb; margin: 40px 0; }
-    </style>
-  </head>
-  <body>
-    <h1>Chainpulse Blog</h1>
-    
-    {sortedPosts.length === 0 ? (
-      <p style="text-align: center;">Belum ada postingan. Silakan buat postingan baru di dashboard.</p>
-    ) : (
-      <ul>
-        {sortedPosts.map((post) => (
-          <li>
-            <a href={`/posts/${post.id}`}>
-              {post.data.title}
-            </a>
-            <small>📅 {new Date(post.data.publishDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</small>
-          </li>
-        ))}
-      </ul>
-    )}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RWAHQ — Research on Tokenized Real-World Assets</title>
+  <meta name="description" content="Independent research and analysis on RWA tokenization, DeFi lending, and institutional crypto adoption. No hype, just data.">
+  <link rel="canonical" href="https://rwahq.dev">
 
-    <hr />
-    <p style="text-align: center; font-size: 0.8rem; color: #9ca3af;">&copy; 2026 Chainpulse - All Rights Reserved</p>
-  </body>
+  <meta property="og:title" content="RWAHQ — Research on Tokenized Real-World Assets">
+  <meta property="og:description" content="Independent research on RWA tokenization, DeFi lending, and institutional crypto adoption.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rwahq.dev">
+  <meta property="og:site_name" content="RWAHQ">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="RWAHQ — Research on Tokenized Real-World Assets">
+  <meta name="twitter:description" content="Independent research on RWA tokenization, DeFi lending, and institutional crypto adoption.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script is:inline src="https://unpkg.com/lucide@latest"></script>
+
+  <style is:global>
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-up { animation: fadeUp 0.6s ease-out forwards; }
+    .animate-fade-up-delay { animation: fadeUp 0.6s ease-out 0.15s forwards; opacity: 0; }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-slate-900 font-sans antialiased">
+
+  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/80 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
+      <a href="/" class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+          <i data-lucide="activity" class="w-4 h-4 text-white"></i>
+        </div>
+        <span class="font-bold text-gray-900 tracking-tight">RW<span class="text-blue-600">AHQ</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-6 text-sm text-gray-500">
+        <a href="/blog" class="hover:text-blue-600 transition-colors">Blog</a>
+        <a href="/market" class="hover:text-blue-600 transition-colors">Market</a>
+        <a href="/learn" class="hover:text-blue-600 transition-colors">Learn</a>
+        <a href="/tools" class="hover:text-blue-600 transition-colors">Tools</a>
+      </div>
+      <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+        <i data-lucide="menu" class="w-5 h-5 text-gray-600"></i>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white">
+      <div class="px-4 py-3 space-y-2">
+        <a href="/blog" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Blog</a>
+        <a href="/market" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Market</a>
+        <a href="/learn" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Learn</a>
+        <a href="/tools" class="block py-2 text-sm text-gray-600 hover:text-blue-600">Tools</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900"></div>
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px); background-size: 60px 60px;"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40">
+      <div class="max-w-3xl">
+        <div class="animate-fade-up">
+          <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-blue-200 text-xs font-bold uppercase tracking-[0.15em] px-4 py-1.5 rounded-full border border-white/10 mb-6">
+            <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+            Independent Research
+          </span>
+        </div>
+        <h1 class="animate-fade-up text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight mb-6">
+          RWA Research,<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-200">Without the Noise.</span>
+        </h1>
+        <p class="animate-fade-up-delay text-lg sm:text-xl text-blue-100/80 leading-relaxed max-w-2xl mb-10">
+          We track how real-world assets move on-chain. No hype, no sponsored shills — just data, context, and honest analysis you won't find on Crypto Twitter.
+        </p>
+        <div class="animate-fade-up-delay flex flex-wrap gap-4">
+          <a href="/blog" class="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-colors shadow-lg shadow-blue-900/30">
+            Read the Blog <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+          <a href="/learn" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold hover:bg-white/20 transition-colors border border-white/10">
+            <i data-lucide="play-circle" class="w-4 h-4"></i> Start Learning
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div>
+          <p class="text-2xl sm:text-3xl font-extrabold text-gray-900">$8.2B</p>
+          <p class="text-xs text-gray-500 mt-1 uppercase tracking-wider font-medium">RWA TVL On-Chain</p>
+        </div>
+        <div>
+          <p class="text-2xl sm:text-3xl font-extrabold text-gray-900">3</p>
+          <p class="text-xs text-gray-500 mt-1 uppercase tracking-wider font-medium">BlackRock RWA Funds</p>
+        </div>
+        <div>
+          <p class="text-2xl sm:text-3xl font-extrabold text-gray-900">47</p>
+          <p class="text-xs text-gray-500 mt-1 uppercase tracking-wider font-medium">Countries Regulating</p>
+        </div>
+        <div>
+          <p class="text-2xl sm:text-3xl font-extrabold text-gray-900">Free</p>
+          <p class="text-xs text-gray-500 mt-1 uppercase tracking-wider font-medium">Always</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-2xl font-bold text-gray-900">Latest Research</h2>
+      <a href="/blog" class="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 transition-colors">
+        All Articles <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+
+    <a href="/blog/rwa-tokenization-guide" class="group block bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-300">
+      <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="h-56 lg:h-auto bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center relative overflow-hidden">
+          <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 30% 40%, white 1px, transparent 1px), radial-gradient(circle at 70% 60%, white 1px, transparent 1px); background-size: 40px 40px;"></div>
+          <div class="relative text-center px-8">
+            <i data-lucide="landmark" class="w-16 h-16 text-white/30 mx-auto mb-3"></i>
+            <p class="text-white/50 text-xs font-mono uppercase tracking-wider">Featured Guide</p>
+          </div>
+        </div>
+        <div class="p-8 lg:p-10 flex flex-col justify-center">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-blue-600 font-bold uppercase tracking-[0.15em] text-[11px] bg-blue-50 px-3 py-1 rounded-full">Deep Dive</span>
+            <span class="text-gray-400 text-xs">12 min read</span>
+          </div>
+          <h3 class="text-xl sm:text-2xl font-bold text-gray-900 leading-snug mb-3 group-hover:text-blue-600 transition-colors">
+            RWA Tokenization: What's Actually Happening in 2025 (And What's Just Hype)
+          </h3>
+          <p class="text-gray-500 text-sm leading-relaxed mb-5">
+            BlackRock launched a tokenized Treasury fund. Ondo is building yield-bearing stablecoins. But how much of this is real, and how much is narrative? We looked at the actual numbers.
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs">R</div>
+            <div>
+              <p class="text-sm font-semibold text-gray-800">RWAHQ Editorial</p>
+              <p class="text-xs text-gray-400">June 2, 2025</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </section>
+
+  <section class="bg-white border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-2xl font-bold text-gray-900">All Articles</h2>
+        <a href="/blog" class="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 transition-colors">View All <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+      </div>
+      {sortedPosts.length === 0 ? (
+        <div class="text-center py-16">
+          <i data-lucide="file-text" class="w-12 h-12 text-gray-300 mx-auto mb-4"></i>
+          <p class="text-gray-400 text-sm">No articles yet from Keystatic. Check back soon.</p>
+        </div>
+      ) : (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedPosts.slice(0, 6).map((post) => (
+            <a href={`/blog/${post.id}`} class="group bg-gray-50 rounded-xl border border-gray-100 overflow-hidden hover:shadow-md hover:border-gray-200 hover:bg-white transition-all duration-200">
+              <div class="h-40 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center">
+                <i data-lucide="file-text" class="w-10 h-10 text-gray-300"></i>
+              </div>
+              <div class="p-5">
+                <p class="text-xs text-gray-400 mb-2 font-medium">
+                  {new Date(post.data.publishDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </p>
+                <h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors leading-snug line-clamp-2">{post.data.title}</h3>
+                {post.data.description && (
+                  <p class="text-xs text-gray-400 mt-2 leading-relaxed line-clamp-2">{post.data.description}</p>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h2 class="text-2xl font-bold text-gray-900 mb-8">Topics We Cover</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      <a href="/blog/rwa-tokenization-guide" class="group flex flex-col items-center gap-3 bg-white rounded-xl border border-gray-100 p-6 hover:border-blue-200 hover:shadow-sm transition-all">
+        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center group-hover:bg-blue-100 transition-colors"><i data-lucide="landmark" class="w-6 h-6 text-blue-600"></i></div>
+        <p class="text-sm font-semibold text-gray-800 text-center">RWA & Tokenization</p>
+      </a>
+      <a href="/blog/defi-lending-explained" class="group flex flex-col items-center gap-3 bg-white rounded-xl border border-gray-100 p-6 hover:border-purple-200 hover:shadow-sm transition-all">
+        <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center group-hover:bg-purple-100 transition-colors"><i data-lucide="layers" class="w-6 h-6 text-purple-600"></i></div>
+        <p class="text-sm font-semibold text-gray-800 text-center">DeFi Lending</p>
+      </a>
+      <a href="/learn" class="group flex flex-col items-center gap-3 bg-white rounded-xl border border-gray-100 p-6 hover:border-green-200 hover:shadow-sm transition-all">
+        <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center group-hover:bg-green-100 transition-colors"><i data-lucide="shield-check" class="w-6 h-6 text-green-600"></i></div>
+        <p class="text-sm font-semibold text-gray-800 text-center">Regulation</p>
+      </a>
+      <a href="/market" class="group flex flex-col items-center gap-3 bg-white rounded-xl border border-gray-100 p-6 hover:border-amber-200 hover:shadow-sm transition-all">
+        <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center group-hover:bg-amber-100 transition-colors"><i data-lucide="coins" class="w-6 h-6 text-amber-600"></i></div>
+        <p class="text-sm font-semibold text-gray-800 text-center">Tokenized Commodities</p>
+      </a>
+      <a href="/blog" class="group flex flex-col items-center gap-3 bg-white rounded-xl border border-gray-100 p-6 hover:border-cyan-200 hover:shadow-sm transition-all">
+        <div class="w-12 h-12 bg-cyan-50 rounded-xl flex items-center justify-center group-hover:bg-cyan-100 transition-colors"><i data-lucide="building-2" class="w-6 h-6 text-cyan-600"></i></div>
+        <p class="text-sm font-semibold text-gray-800 text-center">Real Estate</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="bg-gradient-to-br from-blue-600 to-indigo-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="max-w-2xl mx-auto text-center">
+        <i data-lucide="bell-ring" class="w-10 h-10 text-blue-200 mx-auto mb-4"></i>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">Get Our Weekly Breakdown</h2>
+        <p class="text-blue-200 mb-8">One email per week. RWA TVL updates, new protocol launches, regulatory changes, and the stuff that actually matters. No spam, ever.</p>
+        <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <input type="email" placeholder="you@email.com" class="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-sm text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-white/30">
+          <button id="subscribe-btn" class="px-6 py-3 bg-white text-blue-700 font-semibold text-sm rounded-xl hover:bg-blue-50 transition-colors whitespace-nowrap">Subscribe</button>
+        </div>
+        <p id="subscribe-msg" class="text-xs text-blue-200 mt-3 hidden"></p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-gray-900 text-gray-400 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <div class="flex items-center gap-2.5 mb-4">
+            <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center"><i data-lucide="activity" class="w-3.5 h-3.5 text-white"></i></div>
+            <span class="font-bold text-white text-sm">RW<span class="text-blue-400">AHQ</span></span>
+          </div>
+          <p class="text-sm text-gray-500 leading-relaxed">Independent research on tokenized real-world assets. We're not funded by any protocol. That's the point.</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Pages</p>
+          <div class="space-y-2">
+            <a href="/blog" class="block text-sm text-gray-400 hover:text-white transition-colors">Blog</a>
+            <a href="/market" class="block text-sm text-gray-400 hover:text-white transition-colors">Market Data</a>
+            <a href="/learn" class="block text-sm text-gray-400 hover:text-white transition-colors">Learn</a>
+            <a href="/tools" class="block text-sm text-gray-400 hover:text-white transition-colors">Tools</a>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4">Connect</p>
+          <div class="space-y-2">
+            <a href="https://twitter.com/rwahq_io" class="block text-sm text-gray-400 hover:text-white transition-colors">Twitter / X</a>
+            <a href="https://github.com/rwahq" class="block text-sm text-gray-400 hover:text-white transition-colors">GitHub</a>
+          </div>
+        </div>
+      </div>
+      <div class="pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-xs text-gray-500">© 2025 RWAHQ. Not financial advice. Always DYOR.</p>
+        <div class="flex items-center gap-4">
+          <a href="https://twitter.com/rwahq_io" class="hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+          <a href="https://github.com/rwahq" class="hover:text-white transition-colors"><i data-lucide="github" class="w-4 h-4"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script is:inline>
+    lucide.createIcons();
+    document.getElementById('mobile-menu-btn').addEventListener('click', function () { document.getElementById('mobile-menu').classList.toggle('hidden'); });
+    var subBtn = document.getElementById('subscribe-btn'); var subMsg = document.getElementById('subscribe-msg'); var subInput = subBtn.previousElementSibling;
+    subBtn.addEventListener('click', function () {
+      var email = subInput.value.trim();
+      if (!email || !email.includes('@')) { subMsg.textContent = 'Enter a valid email.'; subMsg.classList.remove('hidden'); subMsg.classList.add('text-red-300'); return; }
+      subBtn.textContent = 'Sending...'; subBtn.disabled = true;
+      setTimeout(function () { subBtn.textContent = '✓ Done!'; subInput.value = ''; subMsg.textContent = "You're in."; subMsg.classList.remove('hidden','text-red-300'); subMsg.classList.add('text-green-300');
+        setTimeout(function () { subBtn.textContent = 'Subscribe'; subBtn.disabled = false; subMsg.classList.add('hidden'); }, 3000);
+      }, 800);
+    });
+  </script>
+</body>
 </html>
