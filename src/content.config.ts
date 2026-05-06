@@ -2,8 +2,8 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders'; // Loader baru di Astro 6
 
 const posts = defineCollection({
-  // Gunakan loader 'glob' untuk memantau file .md
-  loader: glob({ pattern: "**/*.md", base: "./src/content/posts" }),
+  // Kita ubah pattern agar mencari file .md DAN .mdoc
+  loader: glob({ pattern: "**/*.{md,mdoc}", base: "./src/content/posts" }),
   schema: z.object({
     title: z.string(),
     publishDate: z.string().or(z.date()),
