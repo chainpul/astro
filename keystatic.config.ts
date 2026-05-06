@@ -1,4 +1,3 @@
-// keystatic.config.ts
 import { config, fields, collection } from '@keystatic/core';
 
 export default config({
@@ -9,7 +8,7 @@ export default config({
     project: 'chainpul/astro',
   },
   ui: {
-    brand: { name: 'CHAINPUL' },
+    brand: { name: 'SQUIDRBX' },
   },
   collections: {
     posts: collection({
@@ -17,19 +16,22 @@ export default config({
       slugField: 'title',
       path: 'src/content/posts/*',
       format: { contentField: 'content' },
+      // Menentukan di mana file gambar disimpan secara fisik
+      assets: {
+        handle: (slug) => `src/assets/posts/${slug}/`,
+      },
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
-        // --- UPDATE BAGIAN INI ---
         content: fields.markdoc({ 
           label: 'Content',
           options: {
             image: {
-              directory: 'src/assets/posts', // Gambar akan disimpan di sini
-              publicPath: '../../assets/posts/', // Agar Astro bisa memanggilnya
+              // Konfigurasi agar gambar masuk ke folder assets
+              directory: 'src/assets/posts/',
+              publicPath: '../../assets/posts/',
             },
           },
         }),
-        // -------------------------
         publishDate: fields.date({ label: 'Published Date' }),
       },
     }),
