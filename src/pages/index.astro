@@ -13,23 +13,24 @@ const sortedPosts = allPosts.sort((a, b) => {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SQUIDRBX - Daftar Postingan</title>
+    <title>Chainpulse - Daftar Postingan</title>
     <style>
-      body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; line-height: 1.6; background: #f9f9f9; }
-      h1 { color: #333; text-align: center; }
+      body { font-family: 'Inter', sans-serif; max-width: 800px; margin: auto; padding: 20px; line-height: 1.6; background: #f4f7f6; color: #333; }
+      h1 { color: #1a1a1a; text-align: center; margin-bottom: 30px; letter-spacing: -1px; }
       ul { list-style: none; padding: 0; }
-      li { margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-      a { text-decoration: none; color: #007bff; font-weight: bold; font-size: 1.1rem; }
-      a:hover { color: #0056b3; }
-      small { color: #666; }
-      .admin-link { display: inline-block; margin-top: 20px; padding: 10px; background: #28a745; color: white; border-radius: 5px; text-decoration: none; }
+      li { margin-bottom: 20px; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }
+      li:hover { transform: translateY(-3px); }
+      a { text-decoration: none; color: #2563eb; font-weight: bold; font-size: 1.2rem; display: block; margin-bottom: 5px; }
+      a:hover { color: #1d4ed8; }
+      small { color: #6b7280; font-size: 0.9rem; }
+      hr { border: 0; border-top: 1px solid #e5e7eb; margin: 40px 0; }
     </style>
   </head>
   <body>
-    <h1>SQUIDRBX Blog</h1>
+    <h1>Chainpulse Blog</h1>
     
     {sortedPosts.length === 0 ? (
-      <p style="text-align: center;">Belum ada postingan. Coba cek folder src/content/posts kamu.</p>
+      <p style="text-align: center;">Belum ada postingan. Silakan buat postingan baru di dashboard.</p>
     ) : (
       <ul>
         {sortedPosts.map((post) => (
@@ -37,16 +38,13 @@ const sortedPosts = allPosts.sort((a, b) => {
             <a href={`/posts/${post.id}`}>
               {post.data.title}
             </a>
-            <br />
-            <small>Diterbitkan: {post.data.publishDate}</small>
+            <small>📅 {new Date(post.data.publishDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</small>
           </li>
         ))}
       </ul>
     )}
 
     <hr />
-    <div style="text-align: center;">
-      <a href="/keystatic" class="admin-link">→ Buka Dashboard Admin</a>
-    </div>
+    <p style="text-align: center; font-size: 0.8rem; color: #9ca3af;">&copy; 2026 Chainpulse - All Rights Reserved</p>
   </body>
 </html>
