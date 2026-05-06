@@ -3,11 +3,10 @@ import { config, fields, collection } from '@keystatic/core';
 
 export default config({
   storage: {
-    kind: 'cloud', 
-    // Bagian 'repo' sudah dihapus karena menggunakan mode cloud
+    kind: 'cloud',
   },
   cloud: {
-    project: 'chainpul/astro', // Gunakan format tim/proyek seperti ini
+    project: 'chainpul/astro',
   },
   ui: {
     brand: { name: 'CHAINPUL' },
@@ -20,7 +19,17 @@ export default config({
       format: { contentField: 'content' },
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
-        content: fields.markdoc({ label: 'Content' }),
+        // --- UPDATE BAGIAN INI ---
+        content: fields.markdoc({ 
+          label: 'Content',
+          options: {
+            image: {
+              directory: 'src/assets/posts', // Gambar akan disimpan di sini
+              publicPath: '../../assets/posts/', // Agar Astro bisa memanggilnya
+            },
+          },
+        }),
+        // -------------------------
         publishDate: fields.date({ label: 'Published Date' }),
       },
     }),
