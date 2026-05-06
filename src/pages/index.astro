@@ -2,44 +2,51 @@
 // 1. Import fungsi untuk mengambil data koleksi
 import { getCollection } from 'astro:content';
 
-// 2. Ambil data dari folder src/content/posts
-// Variabel 'allPosts' harus didefinisikan di sini
+// 2. Ambil semua data dan urutkan berdasarkan tanggal terbaru
 const allPosts = await getCollection('posts');
+const sortedPosts = allPosts.sort((a, b) => {
+  return new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime();
+});
 ---
 
 <html lang="id">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Daftar Postingan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SQUIDRBX - Daftar Postingan</title>
     <style>
-      body { font-family: sans-serif; padding: 40px; line-height: 1.6; }
-      h1 { color: #333; }
+      body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; line-height: 1.6; background: #f9f9f9; }
+      h1 { color: #333; text-align: center; }
       ul { list-style: none; padding: 0; }
-      li { margin-bottom: 10px; background: #f4f4f4; padding: 10px; border-radius: 5px; }
-      a { text-decoration: none; color: blue; font-weight: bold; }
-      a:hover { text-decoration: underline; }
+      li { margin-bottom: 15px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+      a { text-decoration: none; color: #007bff; font-weight: bold; font-size: 1.1rem; }
+      a:hover { color: #0056b3; }
+      small { color: #666; }
+      .admin-link { display: inline-block; margin-top: 20px; padding: 10px; background: #28a745; color: white; border-radius: 5px; text-decoration: none; }
     </style>
   </head>
   <body>
-    <h1>Blog Saya</h1>
+    <h1>SQUIDRBX Blog</h1>
     
-    {allPosts.length === 0 && <p>Belum ada postingan.</p>}
-
-    <ul>
-      {allPosts.map((post) => (
-        <li>
-          {/* Gunakan post.id untuk link-nya */}
-          <a href={`/posts/${post.id}`}>
-            {post.data.title}
-          </a>
-          <br />
-          <small>{post.data.publishDate}</small>
-        </li>
-      ))}
-    </ul>
+    {sortedPosts.length === 0 ? (
+      <p style="text-align: center;">Belum ada postingan. Coba cek folder src/content/posts kamu.</p>
+    ) : (
+      <ul>
+        {sortedPosts.map((post) => (
+          <li>
+            <a href={`/posts/${post.id}`}>
+              {post.data.title}
+            </a>
+            <br />
+            <small>Diterbitkan: {post.data.publishDate}</small>
+          </li>
+        ))}
+      </ul>
+    )}
 
     <hr />
-    <p><a href="/keystatic" style="color: green;">→ Buka Dashboard Admin</a></p>
+    <div style="text-align: center;">
+      <a href="/keystatic" class="admin-link">→ Buka Dashboard Admin</a>
+    </div>
   </body>
 </html>
