@@ -1,18 +1,18 @@
 import { defineConfig } from 'astro/config';
 import keystatic from '@keystatic/astro';
 import react from '@astrojs/react';
+import markdoc from '@astrojs/markdoc'; // 1. Import Markdoc
 import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
-  // Tambahkan URL website kamu di sini
   site: 'https://squidrbx.pages.dev', 
   
   integrations: [
     react(), 
+    markdoc(), // 2. Tambahkan Markdoc di sini agar file .mdoc terbaca
     keystatic()
   ],
   
-  // Gunakan 'static' (Default Astro 5+), ia sudah mendukung prerendering otomatis
   output: 'static', 
   
   adapter: cloudflare({
