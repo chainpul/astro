@@ -1,0 +1,39 @@
+---
+import { getCollection, render } from 'astro:content';
+
+// 1. Fungsi untuk menentukan semua halaman yang harus dibuat
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { id: post.id }, // Menyesuaikan dengan nama file [id].astro
+    props: { post },
+  }));
+}
+
+// 2. Ambil data postingan dari props
+const { post } = Astro.props;
+
+// 3. Render konten Markdown menjadi HTML (Fitur baru Astro 6)
+const { Content } = await render(post);
+---
+
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <title>{post.data.title}</title>
+    <style>
+      body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+      article { line-height: 1.6; }
+    </style>
+  </head>
+  <body>
+    <a href="/">← Kembali ke Beranda</a>
+    <hr />
+    <h1>{post.data.title}</h1>
+    <p><em>Dipublikasikan pada: {post.data.publishDate}</em></p>
+    
+    <article>
+      <Content />
+    </article>
+  </body>
+</html>
