@@ -1,39 +1,57 @@
 ---
 import { getCollection, render } from 'astro:content';
 
-// 1. Fungsi untuk menentukan semua halaman yang harus dibuat
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
   return posts.map(post => ({
-    params: { id: post.id }, // Menyesuaikan dengan nama file [id].astro
+    params: { id: post.id },
     props: { post },
   }));
 }
 
-// 2. Ambil data postingan dari props
 const { post } = Astro.props;
-
-// 3. Render konten Markdown menjadi HTML (Fitur baru Astro 6)
 const { Content } = await render(post);
 ---
 
 <html lang="id">
   <head>
     <meta charset="utf-8" />
-    <title>{post.data.title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{post.data.title} - SQUIDRBX</title>
     <style>
-      body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }
-      article { line-height: 1.6; }
+      body { font-family: 'Inter', sans-serif; max-width: 800px; margin: auto; padding: 20px; color: #333; }
+      article { line-height: 1.8; font-size: 1.1rem; }
+      /* Gaya agar gambar di dalam artikel responsif */
+      article img { 
+        max-width: 100%; 
+        height: auto; 
+        border-radius: 12px; 
+        margin: 20px 0;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      }
+      a { color: #2563eb; text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      .date { color: #666; font-size: 0.9rem; }
     </style>
   </head>
   <body>
-    <a href="/">← Kembali ke Beranda</a>
+    <nav>
+      <a href="/">← Kembali ke Beranda</a>
+    </nav>
+    
+    <header>
+      <h1>{post.data.title}</h1>
+      <p class="date">Dipublikasikan pada: {post.data.publishDate}</p>
+    </header>
+    
     <hr />
-    <h1>{post.data.title}</h1>
-    <p><em>Dipublikasikan pada: {post.data.publishDate}</em></p>
     
     <article>
       <Content />
     </article>
+
+    <footer style="margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; text-align: center;">
+      <p>© 2026 SQUIDRBX - Saka Project</p>
+    </footer>
   </body>
 </html>
